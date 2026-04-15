@@ -21,7 +21,7 @@ http.createServer(function(req, res) {
       let parsed;
       try { parsed = JSON.parse(body); } catch(e) { res.writeHead(400); res.end('{}'); return; }
       const payload = JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 1000,
         messages: parsed.messages
       });
