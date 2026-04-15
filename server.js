@@ -5,27 +5,26 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
-http.createServer((req, res) => {
+http.createServer(function(req, res) {
 
   if (req.method === 'POST' && req.url === '/api/claude') {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'API key not configured' }));
+      res.writeHead(500, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify({error: 'no key'}));
       return;
     }
     let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', () => {
+    req.on('data', function(chunk) { body += chunk; });
+    req.on('end', function() {
       let parsed;
-      try { parsed = JSON.parse(body); }
-      catch(e) { res.writeHead(400); res.end('{}'); return; }
+      try { parsed = JSON.parse(body); } catch(e) { res.writeHead(400); res.end('{}'); return; }
       const payload = JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
         messages: parsed.messages
       });
-      const apiReq = https.request({
+      const options = {
         hostname: 'api.anthropic.com',
         path: '/v1/messages',
         method: 'POST',
@@ -35,15 +34,19 @@ http.createServer((req, res) => {
           'anthropic-version': '2023-06-01',
           'Content-Length': Buffer.byteLength(payload)
         }
-      }, (apiRes) => {
+      };
+      const apiReq = https.request(options, function(apiRes) {
         let data = '';
-        apiRes.on('data', c => data += c);
-        apiRes.on('end', () => {
-          res.writeHead(apiRes.statusCode, { 'Content-Type': 'application/json' });
+        apiRes.on('data', function(c) { data += c; });
+        apiRes.on('end', function() {
+          res.writeHead(apiRes.statusCode, {'Content-Type': 'application/json'});
           res.end(data);
         });
       });
-      apiReq.on('error', err => { res.writeHead(500); res.end(JSON.stringify({ error: err.message })); });
+      apiReq.on('error', function(err) {
+        res.writeHead(500);
+        res.end(JSON.stringify({error: err.message}));
+      });
       apiReq.write(payload);
       apiReq.end();
     });
@@ -51,10 +54,9 @@ http.createServer((req, res) => {
   }
 
   if (req.method === 'GET') {
-    const filePath = path.join(__dirname, 'index.html');
-    fs.readFile(filePath, (err, data) => {
+    fs.readFile(path.join(__dirname, 'index.html'), function(err, data) {
       if (err) { res.writeHead(404); res.end('Not found'); return; }
-      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
       res.end(data);
     });
     return;
@@ -63,4 +65,4 @@ http.createServer((req, res) => {
   res.writeHead(404);
   res.end('Not found');
 
-}).listen(PORT, () => console.log('Rodando na porta ' + PORT));
+}).listen(PORT);
