@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destrave · Respostas WhatsApp</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0F0D;
+  --surface: #111A15;
+  --surface2: #182210;
+  --card: #1A2B1E;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #EFF5F0;
+  --text2: #8FA894;
+  --text3: #5A7060;
+  --green: #25D366;
+  --green-light: rgba(37,211,102,0.12);
+  --green-glow: rgba(37,211,102,0.06);
+  --bubble-out: #1F5C35;
+  --bubble-in: #1E2A20;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px 40px; }
+.app { max-width: 960px; margin: 0 auto; }
+
+.header { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.logo-wrap { width: 44px; height: 44px; background: var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-wrap svg { width: 24px; height: 24px; }
+.header-text h1 { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+.header-text p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+.header-badge { margin-left: auto; background: var(--green-light); color: var(--green); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+.layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
+@media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
+
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.panel-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+
+.situacao-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 18px; }
+.sit-btn { padding: 9px 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--text2); text-align: center; transition: all 0.15s; line-height: 1.3; }
+.sit-btn .sit-icon { display: block; font-size: 18px; margin-bottom: 4px; }
+.sit-btn:hover { border-color: var(--green); color: var(--text); background: var(--green-light); }
+.sit-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
+
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+.field input, .field textarea { width: 100%; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; resize: none; transition: border-color 0.15s; }
+.field input::placeholder, .field textarea::placeholder { color: var(--text3); }
+.field input:focus, .field textarea:focus { border-color: var(--green); }
+.field textarea { min-height: 80px; line-height: 1.5; }
+
+.sep { display: flex; align-items: center; gap: 8px; margin: 14px 0 12px; }
+.sep span { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+.sep::before, .sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.tom-row { display: flex; gap: 6px; margin-bottom: 18px; }
+.tom-chip { flex: 1; padding: 8px 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--text2); text-align: center; transition: all 0.15s; }
+.tom-chip:hover { border-color: var(--green); color: var(--text); }
+.tom-chip.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
+
+.btn-gerar { width: 100%; padding: 13px; background: var(--green); color: #0A0F0D; border: none; border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.15s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-gerar:hover { opacity: 0.88; }
+.btn-gerar:active { transform: scale(0.99); }
+.btn-gerar:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.output-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; min-height: 520px; display: flex; flex-direction: column; }
+
+.wa-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+.wa-avatar { width: 36px; height: 36px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #0A0F0D; flex-shrink: 0; }
+.wa-info { flex: 1; }
+.wa-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.wa-status { font-size: 11px; color: var(--green); }
+.wa-actions { display: flex; gap: 8px; }
+.wa-action-btn { padding: 6px 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+.wa-action-btn:hover { border-color: var(--green); color: var(--green); }
+.wa-action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.chat-area { flex: 1; padding: 20px 16px; overflow-y: auto; background: var(--bg); background-image: radial-gradient(circle at 20% 80%, var(--green-glow) 0%, transparent 50%); display: flex; flex-direction: column; gap: 6px; }
+
+.chat-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 40px 20px; color: var(--text3); }
+.chat-placeholder svg { width: 36px; height: 36px; opacity: 0.2; }
+.chat-placeholder p { font-size: 13px; line-height: 1.6; }
+
+.msg-in { align-self: flex-start; max-width: 75%; background: var(--bubble-in); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--text2); }
+.msg-in-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+
+.msg-out-wrap { align-self: flex-end; max-width: 82%; display: flex; flex-direction: column; gap: 4px; }
+.msg-out { background: var(--bubble-out); border-radius: 16px 4px 16px 16px; padding: 11px 14px; font-size: 13px; line-height: 1.65; color: var(--text); position: relative; cursor: pointer; transition: opacity 0.15s; border: 1px solid rgba(37,211,102,0.15); white-space: pre-wrap; word-break: break-word; }
+.msg-out:hover { opacity: 0.85; }
+.msg-num { position: absolute; top: -8px; left: -8px; width: 18px; height: 18px; background: var(--green); color: #0A0F0D; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.msg-tick { text-align: right; font-size: 10px; color: var(--text3); margin-top: 4px; }
+.msg-tick span { color: #53BDEB; }
+.copy-hint { text-align: right; font-size: 10px; color: var(--text3); margin-top: 1px; }
+.seq-label { text-align: center; font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 0; margin: 4px 0; }
+
+.loading-wrap { display: flex; align-items: center; gap: 10px; padding: 16px; align-self: flex-end; }
+.typing-bubble { background: var(--bubble-out); border: 1px solid rgba(37,211,102,0.15); border-radius: 16px 4px 16px 16px; padding: 12px 16px; display: flex; gap: 5px; align-items: center; }
+.typing-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: typing 1.2s infinite; opacity: 0.5; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing { 0%,80%,100%{transform:translateY(0);opacity:.4} 40%{transform:translateY(-5px);opacity:1} }
+
+.status-bar { padding: 8px 16px; border-top: 1px solid var(--border); background: var(--card); display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text3); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); }
+.status-dot.ready { background: var(--green); }
+.status-dot.loading { background: #F5A623; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.historico { margin-top: 14px; }
+.historico-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; padding: 0 4px; }
+.historico-item { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
+.historico-item:hover { border-color: var(--green); background: var(--green-light); }
+.historico-item-tipo { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.historico-item-nome { font-size: 13px; color: var(--text); font-weight: 500; margin-top: 2px; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--green); color: #0A0F0D; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 100; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo-wrap">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </div>
+    <div class="header-text">
+      <h1>Respostas WhatsApp · Destrave</h1>
+      <p>Gere sequências de mensagens para atendimento reativo</p>
+    </div>
+    <span class="header-badge">WhatsApp</span>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="panel">
+        <div class="panel-label">Situação do cliente</div>
+        <div class="situacao-grid">
+          <button class="sit-btn active" data-sit="recusa-acionamento" onclick="selectSit(this)"><span class="sit-icon">🚫</span>Recusa de acionamento</button>
+          <button class="sit-btn" data-sit="bloqueio-atraso" onclick="selectSit(this)"><span class="sit-icon">⏸️</span>Bloqueio por atraso</button>
+          <button class="sit-btn" data-sit="cobranca" onclick="selectSit(this)"><span class="sit-icon">💰</span>Cobrança</button>
+          <button class="sit-btn" data-sit="cancelamento" onclick="selectSit(this)"><span class="sit-icon">📋</span>Cancelamento</button>
+          <button class="sit-btn" data-sit="reclamacao" onclick="selectSit(this)"><span class="sit-icon">😤</span>Reclamação</button>
+          <button class="sit-btn" data-sit="duvida-plano" onclick="selectSit(this)"><span class="sit-icon">❓</span>Dúvida plano</button>
+          <button class="sit-btn" data-sit="acionamento-ok" onclick="selectSit(this)"><span class="sit-icon">✅</span>Acionamento OK</button>
+          <button class="sit-btn" data-sit="outro" onclick="selectSit(this)"><span class="sit-icon">💬</span>Outro</button>
+        </div>
+
+        <div class="sep"><span>Dados</span></div>
+        <div class="field"><label>Nome do cliente</label><input type="text" id="nome" placeholder="Ex: Carlos"></div>
+        <div class="field"><label>Mensagem / contexto</label><textarea id="contexto" placeholder="Cole a mensagem do cliente ou descreva o que aconteceu..."></textarea></div>
+
+        <div class="sep"><span>Tom</span></div>
+        <div class="tom-row">
+          <button class="tom-chip active" data-tom="proximo e empatico" onclick="selectTom(this)">Próximo</button>
+          <button class="tom-chip" data-tom="firme e direto" onclick="selectTom(this)">Firme</button>
+          <button class="tom-chip" data-tom="conciliador" onclick="selectTom(this)">Conciliador</button>
+        </div>
+
+        <button class="btn-gerar" id="btn-gerar" onclick="gerarMensagens()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          Gerar sequência
+        </button>
+      </div>
+
+      <div class="historico" id="historico" style="display:none">
+        <div class="historico-title">Sessão atual</div>
+        <div id="historico-lista"></div>
+      </div>
+    </div>
+
+    <div class="output-panel">
+      <div class="wa-header">
+        <div class="wa-avatar" id="wa-avatar">D</div>
+        <div class="wa-info">
+          <div class="wa-name" id="wa-nome">Atendimento Destrave</div>
+          <div class="wa-status" id="wa-status-text">aguardando...</div>
+        </div>
+        <div class="wa-actions">
+          <button class="wa-action-btn" id="btn-copiar-tudo" onclick="copiarTudo()" disabled>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copiar tudo
+          </button>
+          <button class="wa-action-btn" id="btn-nova" onclick="gerarMensagens()" disabled>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            Nova versão
+          </button>
+        </div>
+      </div>
+
+      <div class="chat-area" id="chat-area">
+        <div class="chat-placeholder" id="chat-placeholder">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+          <p>Preencha os dados ao lado<br>e clique em <strong>Gerar sequência</strong></p>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text">Pronto para gerar</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var REGULAMENTO = [
+  'REGULAMENTO DESTRAVE:',
+  'CARENCIA: plano novo=20 dias; troca de placa=20 dias; fatura vencida paga em atraso=bloqueio 7 dias uteis; inadimplencia 30+dias=cancelamento automatico; reativacao=nova carencia 20 dias.',
+  'LIMITES: guincho/reboque intervalo minimo 30 dias entre usos; planos ate mai/2024=6 acionamentos/ano (2 a cada 2 meses); 24h/7 dias em todo Brasil.',
+  'COBRE: urgencia/emergencia (veiculo EM USO com pane inesperada impedindo continuar trajeto); acidente; pane mecanica/eletrica/seca em transito; pneu furado (cliente precisa ter macaco+chave de roda+estepe calibrado); chave perdida/trancada/quebrada (ate R$200); bateria descarregada; vias publicas e garagens com acesso a via publica.',
+  'NAO COBRE: conveniencia (veiculo parado em local seguro/garagem/residencia sem estar em uso); motorhome/carga/utilitarios pesados; placa diferente da cadastrada; pecas/funilaria/consertos; reembolso; guarda de veiculo em base; alteracao de endereco apos acionamento; locais sem via publica; fora do periodo de assinatura; ma-fe/fraude.',
+  'LIMITES DOS SERVICOS: guincho ate 100km (km extra cobrado); pane seca=guincho ate posto mais proximo ate 50km (nao leva galao-proibido por lei); taxi=apenas com guincho em andamento ate 50km fora cidade; chaveiro ate R$200.',
+  'PAGAMENTO: cartao ou PIX (sem debito automatico); sem juros/multa mas bloqueia 7 dias uteis; reajuste previsto nos Termos de Uso.'
+].join(' ');
+
+var situacaoAtual = 'recusa-acionamento';
+var tomAtual = 'proximo e empatico';
+var mensagensGeradas = [];
+var historico = [];
+
+function selectSit(btn) {
+  document.querySelectorAll('.sit-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  situacaoAtual = btn.dataset.sit;
+}
+
+function selectTom(btn) {
+  document.querySelectorAll('.tom-chip').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  tomAtual = btn.dataset.tom;
+}
+
+function getSitLabel(sit) {
+  var labels = {
+    'recusa-acionamento': 'Recusa de acionamento',
+    'bloqueio-atraso': 'Bloqueio por atraso de pagamento',
+    'cobranca': 'Cobranca / inadimplencia',
+    'cancelamento': 'Cancelamento',
+    'reclamacao': 'Reclamacao / insatisfacao',
+    'duvida-plano': 'Duvida sobre o plano',
+    'acionamento-ok': 'Acionamento autorizado',
+    'outro': 'Outro'
+  };
+  return labels[sit] || sit;
+}
+
+function setStatus(tipo, texto) {
+  var dot = document.getElementById('status-dot');
+  dot.className = 'status-dot' + (tipo === 'ready' ? ' ready' : tipo === 'loading' ? ' loading' : '');
+  document.getElementById('status-text').textContent = texto;
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function parseMensagens(texto) {
+  var blocos = texto.split(/\[MENSAGEM\s*\d+\]/);
+  var result = [];
+  for (var i = 0; i < blocos.length; i++) {
+    var b = blocos[i].trim();
+    if (b.length > 15) result.push(b);
+  }
+  if (result.length >= 2) return result;
+  var paras = texto.split(/\n{2,}/);
+  var fb = [];
+  for (var j = 0; j < paras.length; j++) {
+    var p = paras[j].trim();
+    if (p.length > 20) fb.push(p);
+  }
+  return fb.length >= 1 ? fb : [texto.trim()];
+}
+
+function renderMensagens(msgs, nome, streaming) {
+  var chat = document.getElementById('chat-area');
+  document.getElementById('chat-placeholder').style.display = 'none';
+  chat.querySelectorAll('.msg-in, .msg-out-wrap, .seq-label').forEach(function(e) { e.remove(); });
+
+  var contexto = document.getElementById('contexto').value.trim();
+  if (contexto) {
+    var inEl = document.createElement('div');
+    inEl.className = 'msg-in';
+    inEl.innerHTML = '<div class="msg-in-label">Cliente</div>' + escHtml(contexto.slice(0, 120)) + (contexto.length > 120 ? '...' : '');
+    chat.appendChild(inEl);
+
+    var seqEl = document.createElement('div');
+    seqEl.className = 'seq-label';
+    seqEl.textContent = '— ' + msgs.length + ' mensagem' + (msgs.length > 1 ? 's' : '') + ' sugerida' + (msgs.length > 1 ? 's' : '') + ' —';
+    chat.appendChild(seqEl);
+  }
+
+  for (var i = 0; i < msgs.length; i++) {
+    var wrap = document.createElement('div');
+    wrap.className = 'msg-out-wrap';
+    var bubble = document.createElement('div');
+    bubble.className = 'msg-out';
+    bubble.title = 'Clique para copiar';
+    (function(msgText) {
+      bubble.onclick = function() {
+        navigator.clipboard.writeText(msgText).then(function() { showToast('Mensagem copiada'); });
+      };
+    })(msgs[i]);
+    if (msgs.length > 1) {
+      var num = document.createElement('div');
+      num.className = 'msg-num';
+      num.textContent = i + 1;
+      bubble.appendChild(num);
+    }
+    bubble.appendChild(document.createTextNode(msgs[i]));
+    var tick = document.createElement('div');
+    tick.className = 'msg-tick';
+    tick.innerHTML = (streaming && i === msgs.length - 1) ? '🕐' : '<span>✓✓</span>';
+    bubble.appendChild(tick);
+    wrap.appendChild(bubble);
+    var hint = document.createElement('div');
+    hint.className = 'copy-hint';
+    hint.textContent = 'toque para copiar';
+    wrap.appendChild(hint);
+    chat.appendChild(wrap);
+  }
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function buildPrompt(nome, contexto) {
+  return [
+    'Voce e do time de atendimento da Destrave, empresa brasileira de assistencia veicular por assinatura (destrave.se).',
+    'Redija mensagens de WhatsApp para responder o cliente ' + nome + '.',
+    '',
+    'SITUACAO: ' + getSitLabel(situacaoAtual),
+    'CONTEXTO / MENSAGEM DO CLIENTE: ' + contexto,
+    'TOM SOLICITADO: ' + tomAtual,
+    '',
+    REGULAMENTO,
+    '',
+    'REGRAS DE TOM:',
+    '- Primeira mensagem: "Ola, ' + nome + '! Tudo bem?"',
+    '- Linguagem proxima, humana, profissional',
+    '- Empatia ANTES de qualquer regra',
+    '- Nunca diga "recusamos" - use "nao foi possivel pelo plano"',
+    '- Ao citar regras mencione os Termos de Uso: destrave.se/termos-de-uso',
+    '- Em recusa ou bloqueio: SEMPRE ofereça o servico avulso',
+    '- Finalize com emoji de coracao verde quando o tom for proximo',
+    '- Mensagens curtas e diretas - WhatsApp nao e email',
+    '',
+    'FORMATO OBRIGATORIO:',
+    '[MENSAGEM 1]',
+    'texto da primeira mensagem',
+    '',
+    '[MENSAGEM 2]',
+    'texto da segunda mensagem',
+    '',
+    '[MENSAGEM 3]',
+    'texto da terceira mensagem (somente se necessario)',
+    '',
+    'Sem markdown, sem asteriscos. Cada mensagem independente e pronta para enviar.'
+  ].join('\n');
+}
+
+async function gerarMensagens() {
+  var nome = document.getElementById('nome').value.trim() || 'cliente';
+  var contexto = document.getElementById('contexto').value.trim();
+
+  if (!contexto) {
+    document.getElementById('contexto').focus();
+    document.getElementById('contexto').style.borderColor = '#E74C3C';
+    setTimeout(function() { document.getElementById('contexto').style.borderColor = ''; }, 2000);
+    return;
+  }
+
+  var chat = document.getElementById('chat-area');
+  document.getElementById('chat-placeholder').style.display = 'none';
+  chat.querySelectorAll('.msg-in, .msg-out-wrap, .seq-label, .loading-wrap').forEach(function(e) { e.remove(); });
+
+  var lw = document.createElement('div');
+  lw.className = 'loading-wrap';
+  lw.innerHTML = '<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  chat.appendChild(lw);
+  chat.scrollTop = chat.scrollHeight;
+
+  document.getElementById('btn-gerar').disabled = true;
+  document.getElementById('btn-copiar-tudo').disabled = true;
+  document.getElementById('btn-nova').disabled = true;
+  setStatus('loading', 'Gerando mensagens...');
+  document.getElementById('wa-avatar').textContent = nome.charAt(0).toUpperCase();
+  document.getElementById('wa-nome').textContent = nome;
+  document.getElementById('wa-status-text').textContent = 'digitando...';
+
+  try {
+    var response = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: buildPrompt(nome, contexto) }]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Erro ' + response.status);
+    }
+
+    var data = await response.json();
+    lw.remove();
+
+    var texto = '';
+    if (data.content && data.content[0] && data.content[0].text) {
+      texto = data.content[0].text;
+    }
+
+    var finalMsgs = parseMensagens(texto);
+    mensagensGeradas = finalMsgs;
+    renderMensagens(finalMsgs, nome, false);
+    historico.unshift({ sit: situacaoAtual, nome: nome, msgs: finalMsgs });
+    renderHistorico();
+    setStatus('ready', finalMsgs.length + ' mensagem' + (finalMsgs.length > 1 ? 's' : '') + ' gerada' + (finalMsgs.length > 1 ? 's' : '') + ' - clique para copiar');
+    document.getElementById('wa-status-text').textContent = 'online';
+    document.getElementById('btn-copiar-tudo').disabled = false;
+    document.getElementById('btn-nova').disabled = false;
+
+  } catch(err) {
+    var lw2 = document.querySelector('.loading-wrap');
+    if (lw2) lw2.remove();
+    setStatus('', 'Erro ao gerar. Tente novamente.');
+    console.error(err);
+  }
+
+  document.getElementById('btn-gerar').disabled = false;
+}
+
+function copiarTudo() {
+  navigator.clipboard.writeText(mensagensGeradas.join('\n\n---\n\n')).then(function() { showToast('Todas as mensagens copiadas'); });
+}
+
+function renderHistorico() {
+  if (!historico.length) return;
+  document.getElementById('historico').style.display = 'block';
+  var html = '';
+  for (var i = 0; i < Math.min(historico.length, 4); i++) {
+    var item = historico[i];
+    html += '<div class="historico-item" onclick="carregarHistorico(' + i + ')">';
+    html += '<div class="historico-item-tipo">' + escHtml(getSitLabel(item.sit)) + ' - ' + item.msgs.length + ' msgs</div>';
+    html += '<div class="historico-item-nome">' + escHtml(item.nome) + ' - ' + escHtml(item.msgs[0].slice(0, 45)) + '...</div>';
+    html += '</div>';
+  }
+  document.getElementById('historico-lista').innerHTML = html;
+}
+
+function carregarHistorico(i) {
+  var item = historico[i];
+  mensagensGeradas = item.msgs;
+  document.getElementById('nome').value = item.nome;
+  document.getElementById('wa-avatar').textContent = item.nome.charAt(0).toUpperCase();
+  document.getElementById('wa-nome').textContent = item.nome;
+  document.getElementById('wa-status-text').textContent = 'online';
+  renderMensagens(item.msgs, item.nome, false);
+  setStatus('ready', item.msgs.length + ' msgs - historico');
+  document.getElementById('btn-copiar-tudo').disabled = false;
+  document.getElementById('btn-nova').disabled = false;
+  document.getElementById('chat-placeholder').style.display = 'none';
+}
+</script>
+</body>
+</html>
