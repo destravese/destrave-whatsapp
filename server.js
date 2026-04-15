@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 3000;
 
 http.createServer((req, res) => {
 
-  // Rota da API
   if (req.method === 'POST' && req.url === '/api/claude') {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -15,25 +14,18 @@ http.createServer((req, res) => {
       res.end(JSON.stringify({ error: 'API key not configured' }));
       return;
     }
-
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
       let parsed;
       try { parsed = JSON.parse(body); }
-      catch(e) {
-        res.writeHead(400);
-        res.end(JSON.stringify({ error: 'Invalid JSON' }));
-        return;
-      }
-
+      catch(e) { res.writeHead(400); res.end('{}'); return; }
       const payload = JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
         messages: parsed.messages
       });
-
-      const options = {
+      const apiReq = https.request({
         hostname: 'api.anthropic.com',
         path: '/v1/messages',
         method: 'POST',
@@ -43,9 +35,7 @@ http.createServer((req, res) => {
           'anthropic-version': '2023-06-01',
           'Content-Length': Buffer.byteLength(payload)
         }
-      };
-
-      const apiReq = https.request(options, (apiRes) => {
+      }, (apiRes) => {
         let data = '';
         apiRes.on('data', c => data += c);
         apiRes.on('end', () => {
@@ -53,20 +43,14 @@ http.createServer((req, res) => {
           res.end(data);
         });
       });
-
-      apiReq.on('error', err => {
-        res.writeHead(500);
-        res.end(JSON.stringify({ error: err.message }));
-      });
-
+      apiReq.on('error', err => { res.writeHead(500); res.end(JSON.stringify({ error: err.message })); });
       apiReq.write(payload);
       apiReq.end();
     });
     return;
   }
 
-  // Servir o HTML
-  if (req.method === 'GET' && (req.url === '/' || req.url === '/index.html')) {
+  if (req.method === 'GET') {
     const filePath = path.join(__dirname, 'index.html');
     fs.readFile(filePath, (err, data) => {
       if (err) { res.writeHead(404); res.end('Not found'); return; }
