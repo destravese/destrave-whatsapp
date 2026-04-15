@@ -1,3 +1,4 @@
+console.log('SERVER V2 - rota /api/claude ativa');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
