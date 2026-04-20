@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destrave · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0F0D; --surface: #111A15; --surface2: #182210;
+  --border: rgba(255,255,255,0.07); --text: #EFF5F0;
+  --text2: #8FA894; --text3: #5A7060;
+  --green: #25D366; --green-light: rgba(37,211,102,0.12);
+  --amber: #F5A623; --amber-light: rgba(245,166,35,0.12);
+  --red: #E74C3C; --red-light: rgba(231,76,60,0.12);
+  --blue: #3B82F6; --blue-light: rgba(59,130,246,0.12);
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px 40px; }
+.app { max-width: 1100px; margin: 0 auto; }
+
+.login-wrap { max-width: 360px; margin: 100px auto 0; }
+.login-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
+.login-logo { width: 48px; height: 48px; background: var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.login-logo svg { width: 26px; height: 26px; }
+.login-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+.login-sub { font-size: 13px; color: var(--text2); text-align: center; margin-bottom: 24px; }
+.login-field { margin-bottom: 14px; }
+.login-field label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+.login-field input { width: 100%; padding: 11px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color 0.15s; }
+.login-field input:focus { border-color: var(--green); }
+.login-btn { width: 100%; padding: 12px; background: var(--green); color: #0A0F0D; border: none; border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; transition: opacity 0.15s; }
+.login-btn:hover { opacity: 0.88; }
+.login-erro { color: var(--red); font-size: 12px; text-align: center; margin-top: 10px; display: none; }
+
+.dashboard { display: none; }
+.dash-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.dash-logo { width: 40px; height: 40px; background: var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.dash-logo svg { width: 22px; height: 22px; }
+.dash-title { font-size: 18px; font-weight: 700; }
+.dash-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.dash-updated { margin-left: auto; font-size: 11px; color: var(--text3); }
+.btn-refresh { padding: 7px 14px; background: transparent; border: 1px solid var(--border); border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.15s; margin-left: 10px; }
+.btn-refresh:hover { border-color: var(--green); color: var(--green); }
+
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+@media(max-width:700px){ .metrics-grid { grid-template-columns: repeat(2,1fr); } }
+.metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.metric-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+.metric-value { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.metric-value.green { color: var(--green); }
+.metric-value.red { color: var(--red); }
+.metric-value.amber { color: var(--amber); }
+.metric-value.blue { color: var(--blue); }
+.metric-sub { font-size: 12px; color: var(--text2); }
+
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+@media(max-width:700px){ .charts-grid { grid-template-columns: 1fr; } }
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.chart-title { font-size: 13px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+
+.bar-item { margin-bottom: 12px; }
+.bar-label { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 12px; }
+.bar-label span:first-child { color: var(--text2); }
+.bar-label span:last-child { color: var(--text); font-weight: 600; }
+.bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+
+.verdict-bars .bar-fill.libera { background: var(--green); }
+.verdict-bars .bar-fill.nao-libera { background: var(--red); }
+.verdict-bars .bar-fill.analise { background: var(--amber); }
+
+.sit-bars .bar-fill { background: var(--blue); }
+
+.recentes-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.recentes-title { font-size: 13px; font-weight: 700; margin-bottom: 16px; }
+.recentes-table { width: 100%; border-collapse: collapse; }
+.recentes-table th { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; padding: 0 12px 10px 0; text-align: left; border-bottom: 1px solid var(--border); }
+.recentes-table td { font-size: 12px; color: var(--text2); padding: 10px 12px 10px 0; border-bottom: 1px solid var(--border); }
+.recentes-table tr:last-child td { border-bottom: none; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.badge.libera { background: var(--green-light); color: var(--green); }
+.badge.nao-libera { background: var(--red-light); color: var(--red); }
+.badge.analise { background: var(--amber-light); color: var(--amber); }
+.badge.wa { background: var(--blue-light); color: var(--blue); }
+
+.empty { text-align: center; padding: 40px; color: var(--text3); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="login-wrap" id="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="login-title">Dashboard Destrave</div>
+      <div class="login-sub">Acesso restrito — somente lideranca</div>
+      <div class="login-field">
+        <label>Senha de acesso</label>
+        <input type="password" id="senha-input" placeholder="Digite a senha" onkeydown="if(event.key==='Enter') entrar()">
+      </div>
+      <button class="login-btn" onclick="entrar()">Entrar</button>
+      <div class="login-erro" id="login-erro">Senha incorreta. Tente novamente.</div>
+    </div>
+  </div>
+
+  <div class="dashboard" id="dashboard">
+    <div class="dash-header">
+      <div class="dash-logo">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div class="dash-title">Dashboard Operacional</div>
+        <div class="dash-sub">Atendimento Destrave — tempo real</div>
+      </div>
+      <div class="dash-updated" id="dash-updated"></div>
+      <button class="btn-refresh" onclick="carregarDados()">Atualizar</button>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Total de usos</div>
+        <div class="metric-value blue" id="m-total">0</div>
+        <div class="metric-sub">desde o inicio</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Acionamentos liberados</div>
+        <div class="metric-value green" id="m-liberados">0</div>
+        <div class="metric-sub" id="m-liberados-pct">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Acionamentos negados</div>
+        <div class="metric-value red" id="m-negados">0</div>
+        <div class="metric-sub" id="m-negados-pct">—</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Respostas WhatsApp</div>
+        <div class="metric-value amber" id="m-wa">0</div>
+        <div class="metric-sub">mensagens geradas</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card verdict-bars">
+        <div class="chart-title">Veredictos de acionamento</div>
+        <div id="chart-veredictos"><div class="empty">Sem dados ainda</div></div>
+      </div>
+      <div class="chart-card sit-bars">
+        <div class="chart-title">Situacoes mais frequentes (WhatsApp)</div>
+        <div id="chart-situacoes"><div class="empty">Sem dados ainda</div></div>
+      </div>
+    </div>
+
+    <div class="recentes-card">
+      <div class="recentes-title">Ultimos 20 registros</div>
+      <div id="tabela-recentes"><div class="empty">Sem dados ainda</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var senhaAtual = '';
+
+function entrar() {
+  var senha = document.getElementById('senha-input').value.trim();
+  if (!senha) return;
+  senhaAtual = senha;
+  carregarDados();
+}
+
+async function carregarDados() {
+  try {
+    var response = await fetch('/api/dashboard', {
+      headers: { 'x-dashboard-senha': senhaAtual }
+    });
+    if (response.status === 401) {
+      document.getElementById('login-erro').style.display = 'block';
+      return;
+    }
+    var logs = await response.json();
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('login-erro').style.display = 'none';
+    renderDashboard(logs);
+  } catch(e) {
+    document.getElementById('login-erro').style.display = 'block';
+    document.getElementById('login-erro').textContent = 'Erro ao carregar dados.';
+  }
+}
+
+function renderDashboard(logs) {
+  document.getElementById('dash-updated').textContent = 'Atualizado: ' + new Date().toLocaleTimeString('pt-BR');
+
+  var totalWA = 0, totalLib = 0, totalNeg = 0, totalAnalise = 0;
+  var situacoes = {};
+  var veredictos = { libera: 0, 'nao-libera': 0, analise: 0 };
+
+  logs.forEach(function(l) {
+    if (l.tipo === 'whatsapp') {
+      totalWA++;
+      situacoes[l.situacao] = (situacoes[l.situacao] || 0) + 1;
+    } else if (l.tipo === 'liberacao') {
+      if (l.veredicto === 'libera') { totalLib++; veredictos.libera++; }
+      else if (l.veredicto === 'nao-libera') { totalNeg++; veredictos['nao-libera']++; }
+      else { totalAnalise++; veredictos.analise++; }
+    }
+  });
+
+  var totalAcionamentos = totalLib + totalNeg + totalAnalise;
+  var total = logs.length;
+
+  document.getElementById('m-total').textContent = total;
+  document.getElementById('m-liberados').textContent = totalLib;
+  document.getElementById('m-negados').textContent = totalNeg;
+  document.getElementById('m-wa').textContent = totalWA;
+  document.getElementById('m-liberados-pct').textContent = totalAcionamentos > 0 ? Math.round(totalLib/totalAcionamentos*100) + '% dos acionamentos' : '—';
+  document.getElementById('m-negados-pct').textContent = totalAcionamentos > 0 ? Math.round(totalNeg/totalAcionamentos*100) + '% dos acionamentos' : '—';
+
+  var cvEl = document.getElementById('chart-veredictos');
+  if (totalAcionamentos === 0) {
+    cvEl.innerHTML = '<div class="empty">Sem analises ainda</div>';
+  } else {
+    cvEl.innerHTML = [
+      barItem('Liberados', veredictos.libera, totalAcionamentos, 'libera'),
+      barItem('Nao liberados', veredictos['nao-libera'], totalAcionamentos, 'nao-libera'),
+      barItem('Avaliar c/ lideranca', veredictos.analise, totalAcionamentos, 'analise')
+    ].join('');
+  }
+
+  var csEl = document.getElementById('chart-situacoes');
+  var sitEntries = Object.entries(situacoes).sort(function(a,b){ return b[1]-a[1]; }).slice(0,6);
+  if (sitEntries.length === 0) {
+    csEl.innerHTML = '<div class="empty">Sem mensagens geradas ainda</div>';
+  } else {
+    var maxSit = sitEntries[0][1];
+    csEl.innerHTML = sitEntries.map(function(e) {
+      return barItem(e[0], e[1], maxSit, 'sit');
+    }).join('');
+  }
+
+  var recentes = logs.slice(-20).reverse();
+  var tabelaEl = document.getElementById('tabela-recentes');
+  if (recentes.length === 0) {
+    tabelaEl.innerHTML = '<div class="empty">Sem registros ainda</div>';
+  } else {
+    var rows = recentes.map(function(l) {
+      var hora = l.hora ? new Date(l.hora).toLocaleString('pt-BR') : '—';
+      if (l.tipo === 'whatsapp') {
+        return '<tr><td>' + hora + '</td><td><span class="badge wa">WhatsApp</span></td><td>' + escH(l.situacao || '—') + '</td><td>' + escH(l.nome || '—') + '</td><td>—</td></tr>';
+      } else {
+        var badge = '<span class="badge ' + (l.veredicto||'analise') + '">' + (l.veredicto === 'libera' ? 'Liberado' : l.veredicto === 'nao-libera' ? 'Negado' : 'Avaliar') + '</span>';
+        return '<tr><td>' + hora + '</td><td><span class="badge analise" style="background:var(--surface2);color:var(--text2)">Acionamento</span></td><td>' + escH(l.servico || '—') + '</td><td>' + escH(l.nome || '—') + '</td><td>' + badge + '</td></tr>';
+      }
+    }).join('');
+    tabelaEl.innerHTML = '<table class="recentes-table"><thead><tr><th>Horario</th><th>Tipo</th><th>Situacao</th><th>Cliente</th><th>Resultado</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+}
+
+function barItem(label, valor, total, tipo) {
+  var pct = total > 0 ? Math.round(valor/total*100) : 0;
+  return '<div class="bar-item"><div class="bar-label"><span>' + escH(label) + '</span><span>' + valor + ' (' + pct + '%)</span></div><div class="bar-track"><div class="bar-fill ' + tipo + '" style="width:' + pct + '%"></div></div></div>';
+}
+
+function escH(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+document.getElementById('senha-input').focus();
+</script>
+</body>
+</html>
