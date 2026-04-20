@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Destrave · Respostas WhatsApp</title>
+<title>Destrave · Atendimento</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -21,6 +21,10 @@
   --green-glow: rgba(37,211,102,0.06);
   --bubble-out: #1F5C35;
   --bubble-in: #1E2A20;
+  --amber: #F5A623;
+  --amber-light: rgba(245,166,35,0.12);
+  --red: #E74C3C;
+  --red-light: rgba(231,76,60,0.12);
   --radius: 16px;
   --radius-sm: 10px;
 }
@@ -28,12 +32,18 @@
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px 40px; }
 .app { max-width: 960px; margin: 0 auto; }
 
-.header { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
 .logo-wrap { width: 44px; height: 44px; background: var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .logo-wrap svg { width: 24px; height: 24px; }
 .header-text h1 { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
 .header-text p { font-size: 13px; color: var(--text2); margin-top: 2px; }
-.header-badge { margin-left: auto; background: var(--green-light); color: var(--green); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+.tabs { display: flex; gap: 6px; margin-bottom: 24px; }
+.tab-btn { padding: 10px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--text2); transition: all 0.15s; }
+.tab-btn:hover { border-color: var(--green); color: var(--text); }
+.tab-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 .layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
 @media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
@@ -49,10 +59,11 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 
 .field { margin-bottom: 14px; }
 .field label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
-.field input, .field textarea { width: 100%; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; resize: none; transition: border-color 0.15s; }
+.field input, .field textarea, .field select { width: 100%; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; resize: none; transition: border-color 0.15s; appearance: none; }
 .field input::placeholder, .field textarea::placeholder { color: var(--text3); }
-.field input:focus, .field textarea:focus { border-color: var(--green); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--green); }
 .field textarea { min-height: 80px; line-height: 1.5; }
+.field select option { background: #182210; }
 
 .sep { display: flex; align-items: center; gap: 8px; margin: 14px 0 12px; }
 .sep span { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
@@ -81,14 +92,12 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .wa-action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
 .chat-area { flex: 1; padding: 20px 16px; overflow-y: auto; background: var(--bg); background-image: radial-gradient(circle at 20% 80%, var(--green-glow) 0%, transparent 50%); display: flex; flex-direction: column; gap: 6px; }
-
 .chat-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 40px 20px; color: var(--text3); }
 .chat-placeholder svg { width: 36px; height: 36px; opacity: 0.2; }
 .chat-placeholder p { font-size: 13px; line-height: 1.6; }
 
 .msg-in { align-self: flex-start; max-width: 75%; background: var(--bubble-in); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--text2); }
 .msg-in-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
-
 .msg-out-wrap { align-self: flex-end; max-width: 82%; display: flex; flex-direction: column; gap: 4px; }
 .msg-out { background: var(--bubble-out); border-radius: 16px 4px 16px 16px; padding: 11px 14px; font-size: 13px; line-height: 1.65; color: var(--text); position: relative; cursor: pointer; transition: opacity 0.15s; border: 1px solid rgba(37,211,102,0.15); white-space: pre-wrap; word-break: break-word; }
 .msg-out:hover { opacity: 0.85; }
@@ -108,7 +117,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .status-bar { padding: 8px 16px; border-top: 1px solid var(--border); background: var(--card); display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text3); }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); }
 .status-dot.ready { background: var(--green); }
-.status-dot.loading { background: #F5A623; animation: pulse 1s infinite; }
+.status-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
 
 .historico { margin-top: 14px; }
@@ -117,6 +126,23 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
 .historico-item:hover { border-color: var(--green); background: var(--green-light); }
 .historico-item-tipo { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
 .historico-item-nome { font-size: 13px; color: var(--text); font-weight: 500; margin-top: 2px; }
+
+.verdict-panel { flex: 1; display: flex; flex-direction: column; }
+.verdict-box { margin: 16px; border-radius: var(--radius-sm); padding: 20px; border: 2px solid; }
+.verdict-box.libera { border-color: var(--green); background: rgba(37,211,102,0.06); }
+.verdict-box.nao-libera { border-color: var(--red); background: rgba(231,76,60,0.06); }
+.verdict-box.analise { border-color: var(--amber); background: rgba(245,166,35,0.06); }
+.verdict-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; }
+.verdict-badge.libera { background: var(--green-light); color: var(--green); }
+.verdict-badge.nao-libera { background: var(--red-light); color: var(--red); }
+.verdict-badge.analise { background: var(--amber-light); color: var(--amber); }
+.verdict-justificativa { font-size: 13px; line-height: 1.7; color: var(--text2); margin-bottom: 16px; white-space: pre-wrap; }
+.verdict-msg-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+.verdict-msg { background: var(--bubble-out); border: 1px solid rgba(37,211,102,0.15); border-radius: 12px; padding: 12px 14px; font-size: 13px; line-height: 1.65; color: var(--text); white-space: pre-wrap; cursor: pointer; transition: opacity 0.15s; }
+.verdict-msg:hover { opacity: 0.85; }
+
+.verdict-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 40px 20px; color: var(--text3); }
+.verdict-placeholder p { font-size: 13px; line-height: 1.6; }
 
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--green); color: #0A0F0D; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 100; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -130,101 +156,228 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); colo
       <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </div>
     <div class="header-text">
-      <h1>Respostas WhatsApp · Destrave</h1>
-      <p>Gere sequências de mensagens para atendimento reativo</p>
-    </div>
-    <span class="header-badge">WhatsApp</span>
-  </div>
-
-  <div class="layout">
-    <div>
-      <div class="panel">
-        <div class="panel-label">Situação do cliente</div>
-        <div class="situacao-grid">
-          <button class="sit-btn active" data-sit="recusa-acionamento" onclick="selectSit(this)"><span class="sit-icon">🚫</span>Recusa de acionamento</button>
-          <button class="sit-btn" data-sit="bloqueio-atraso" onclick="selectSit(this)"><span class="sit-icon">⏸️</span>Bloqueio por atraso</button>
-          <button class="sit-btn" data-sit="cobranca" onclick="selectSit(this)"><span class="sit-icon">💰</span>Cobrança</button>
-          <button class="sit-btn" data-sit="cancelamento" onclick="selectSit(this)"><span class="sit-icon">📋</span>Cancelamento</button>
-          <button class="sit-btn" data-sit="reclamacao" onclick="selectSit(this)"><span class="sit-icon">😤</span>Reclamação</button>
-          <button class="sit-btn" data-sit="duvida-plano" onclick="selectSit(this)"><span class="sit-icon">❓</span>Dúvida plano</button>
-          <button class="sit-btn" data-sit="acionamento-ok" onclick="selectSit(this)"><span class="sit-icon">✅</span>Acionamento OK</button>
-          <button class="sit-btn" data-sit="outro" onclick="selectSit(this)"><span class="sit-icon">💬</span>Outro</button>
-        </div>
-
-        <div class="sep"><span>Dados</span></div>
-        <div class="field"><label>Nome do cliente</label><input type="text" id="nome" placeholder="Ex: Carlos"></div>
-        <div class="field"><label>Mensagem / contexto</label><textarea id="contexto" placeholder="Cole a mensagem do cliente ou descreva o que aconteceu..."></textarea></div>
-
-        <div class="sep"><span>Tom</span></div>
-        <div class="tom-row">
-          <button class="tom-chip active" data-tom="proximo e empatico" onclick="selectTom(this)">Próximo</button>
-          <button class="tom-chip" data-tom="firme e direto" onclick="selectTom(this)">Firme</button>
-          <button class="tom-chip" data-tom="conciliador" onclick="selectTom(this)">Conciliador</button>
-        </div>
-
-        <button class="btn-gerar" id="btn-gerar" onclick="gerarMensagens()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          Gerar sequência
-        </button>
-      </div>
-
-      <div class="historico" id="historico" style="display:none">
-        <div class="historico-title">Sessão atual</div>
-        <div id="historico-lista"></div>
-      </div>
-    </div>
-
-    <div class="output-panel">
-      <div class="wa-header">
-        <div class="wa-avatar" id="wa-avatar">D</div>
-        <div class="wa-info">
-          <div class="wa-name" id="wa-nome">Atendimento Destrave</div>
-          <div class="wa-status" id="wa-status-text">aguardando...</div>
-        </div>
-        <div class="wa-actions">
-          <button class="wa-action-btn" id="btn-copiar-tudo" onclick="copiarTudo()" disabled>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            Copiar tudo
-          </button>
-          <button class="wa-action-btn" id="btn-nova" onclick="gerarMensagens()" disabled>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-            Nova versão
-          </button>
-        </div>
-      </div>
-
-      <div class="chat-area" id="chat-area">
-        <div class="chat-placeholder" id="chat-placeholder">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-          <p>Preencha os dados ao lado<br>e clique em <strong>Gerar sequência</strong></p>
-        </div>
-      </div>
-
-      <div class="status-bar">
-        <div class="status-dot" id="status-dot"></div>
-        <span id="status-text">Pronto para gerar</span>
-      </div>
+      <h1>Atendimento Destrave</h1>
+      <p>Assistente de respostas e analise de acionamento</p>
     </div>
   </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('whatsapp', this)">💬 Respostas WhatsApp</button>
+    <button class="tab-btn" onclick="switchTab('liberacao', this)">🔍 Liberacao de Acionamento</button>
+  </div>
+
+  <!-- ABA 1: RESPOSTAS WHATSAPP -->
+  <div class="tab-content active" id="tab-whatsapp">
+    <div class="layout">
+      <div>
+        <div class="panel">
+          <div class="panel-label">Situacao do cliente</div>
+          <div class="situacao-grid">
+            <button class="sit-btn active" data-sit="recusa-acionamento" onclick="selectSit(this)"><span class="sit-icon">🚫</span>Recusa de acionamento</button>
+            <button class="sit-btn" data-sit="bloqueio-atraso" onclick="selectSit(this)"><span class="sit-icon">⏸️</span>Bloqueio por atraso</button>
+            <button class="sit-btn" data-sit="cobranca" onclick="selectSit(this)"><span class="sit-icon">💰</span>Cobranca</button>
+            <button class="sit-btn" data-sit="cancelamento" onclick="selectSit(this)"><span class="sit-icon">📋</span>Cancelamento</button>
+            <button class="sit-btn" data-sit="reclamacao" onclick="selectSit(this)"><span class="sit-icon">😤</span>Reclamacao</button>
+            <button class="sit-btn" data-sit="duvida-plano" onclick="selectSit(this)"><span class="sit-icon">❓</span>Duvida plano</button>
+            <button class="sit-btn" data-sit="acionamento-ok" onclick="selectSit(this)"><span class="sit-icon">✅</span>Acionamento OK</button>
+            <button class="sit-btn" data-sit="outro" onclick="selectSit(this)"><span class="sit-icon">💬</span>Outro</button>
+          </div>
+          <div class="sep"><span>Dados</span></div>
+          <div class="field"><label>Nome do cliente</label><input type="text" id="nome" placeholder="Ex: Carlos"></div>
+          <div class="field"><label>Mensagem / contexto</label><textarea id="contexto" placeholder="Cole a mensagem do cliente ou descreva o que aconteceu..."></textarea></div>
+          <div class="sep"><span>Tom</span></div>
+          <div class="tom-row">
+            <button class="tom-chip active" data-tom="proximo e empatico" onclick="selectTom(this)">Proximo</button>
+            <button class="tom-chip" data-tom="firme e direto" onclick="selectTom(this)">Firme</button>
+            <button class="tom-chip" data-tom="conciliador" onclick="selectTom(this)">Conciliador</button>
+          </div>
+          <button class="btn-gerar" id="btn-gerar" onclick="gerarMensagens()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            Gerar sequencia
+          </button>
+        </div>
+        <div class="historico" id="historico" style="display:none">
+          <div class="historico-title">Sessao atual</div>
+          <div id="historico-lista"></div>
+        </div>
+      </div>
+
+      <div class="output-panel">
+        <div class="wa-header">
+          <div class="wa-avatar" id="wa-avatar">D</div>
+          <div class="wa-info">
+            <div class="wa-name" id="wa-nome">Atendimento Destrave</div>
+            <div class="wa-status" id="wa-status-text">aguardando...</div>
+          </div>
+          <div class="wa-actions">
+            <button class="wa-action-btn" id="btn-copiar-tudo" onclick="copiarTudo()" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copiar tudo
+            </button>
+            <button class="wa-action-btn" id="btn-nova" onclick="gerarMensagens()" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+              Nova versao
+            </button>
+          </div>
+        </div>
+        <div class="chat-area" id="chat-area">
+          <div class="chat-placeholder" id="chat-placeholder">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
+            <p>Preencha os dados ao lado<br>e clique em <strong>Gerar sequencia</strong></p>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div class="status-dot" id="status-dot"></div>
+          <span id="status-text">Pronto para gerar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 2: LIBERACAO DE ACIONAMENTO -->
+  <div class="tab-content" id="tab-liberacao">
+    <div class="layout">
+      <div>
+        <div class="panel">
+          <div class="panel-label">Perfil do cliente</div>
+          <div class="field"><label>Nome do cliente</label><input type="text" id="lib-nome" placeholder="Ex: Daniel Souza"></div>
+          <div class="field">
+            <label>Tempo de assinatura</label>
+            <select id="lib-tempo">
+              <option value="">Selecione...</option>
+              <option value="menos de 3 meses">Menos de 3 meses</option>
+              <option value="3 a 6 meses">3 a 6 meses</option>
+              <option value="6 meses a 1 ano">6 meses a 1 ano</option>
+              <option value="1 a 2 anos">1 a 2 anos</option>
+              <option value="mais de 2 anos">Mais de 2 anos</option>
+              <option value="mais de 4 anos">Mais de 4 anos</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Status de pagamento</label>
+            <select id="lib-pagamento">
+              <option value="">Selecione...</option>
+              <option value="em dia, nunca atrasou">Em dia, nunca atrasou</option>
+              <option value="em dia, ja atrasou algumas vezes">Em dia, ja atrasou algumas vezes</option>
+              <option value="atrasado recentemente">Atrasado recentemente</option>
+              <option value="inadimplente">Inadimplente</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Ultimo uso do servico</label>
+            <select id="lib-ultimo-uso">
+              <option value="">Selecione...</option>
+              <option value="nunca usou">Nunca usou</option>
+              <option value="ha mais de 6 meses">Ha mais de 6 meses</option>
+              <option value="ha 2 a 6 meses">Ha 2 a 6 meses</option>
+              <option value="ha 30 a 60 dias">Ha 30 a 60 dias</option>
+              <option value="ha menos de 30 dias">Ha menos de 30 dias (dentro da carencia)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Frequencia de uso historica</label>
+            <select id="lib-frequencia">
+              <option value="">Selecione...</option>
+              <option value="usa muito pouco (1 a 2 vezes no historico)">Usa muito pouco (1-2 vezes no historico)</option>
+              <option value="uso moderado">Uso moderado</option>
+              <option value="usa com frequencia">Usa com frequencia</option>
+              <option value="uso excessivo ou suspeito">Uso excessivo ou suspeito</option>
+            </select>
+          </div>
+
+          <div class="sep"><span>Situacao do acionamento</span></div>
+
+          <div class="field">
+            <label>Servico solicitado</label>
+            <select id="lib-servico">
+              <option value="">Selecione...</option>
+              <option value="guincho/reboque">Guincho / Reboque</option>
+              <option value="carga de bateria">Carga de bateria</option>
+              <option value="troca de pneu">Troca de pneu</option>
+              <option value="chaveiro">Chaveiro</option>
+              <option value="pane seca">Pane seca</option>
+              <option value="taxi">Taxi</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Onde o veiculo esta agora</label>
+            <select id="lib-local">
+              <option value="">Selecione...</option>
+              <option value="em transito, parou durante uso">Em transito, parou durante o uso</option>
+              <option value="na residencia do cliente">Na residencia do cliente</option>
+              <option value="em garagem ou estacionamento">Em garagem ou estacionamento</option>
+              <option value="em via publica, local seguro">Em via publica, local seguro</option>
+              <option value="em local de risco ou inseguro">Em local de risco ou inseguro</option>
+              <option value="em estrada ou rodovia">Em estrada ou rodovia</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Contexto adicional <span style="color:var(--text3);font-weight:400">(opcional)</span></label>
+            <textarea id="lib-contexto" placeholder="Qualquer informacao relevante que ajude na analise..."></textarea>
+          </div>
+
+          <button class="btn-gerar" id="btn-analisar" onclick="analisarAcionamento()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Analisar acionamento
+          </button>
+        </div>
+      </div>
+
+      <div class="output-panel">
+        <div class="wa-header">
+          <div class="wa-avatar" id="lib-avatar" style="background:#5A7060">?</div>
+          <div class="wa-info">
+            <div class="wa-name" id="lib-nome-display">Analise de acionamento</div>
+            <div class="wa-status" id="lib-status-text">aguardando dados...</div>
+          </div>
+          <div class="wa-actions">
+            <button class="wa-action-btn" id="btn-copiar-msg" onclick="copiarMsgVeredicto()" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copiar mensagem
+            </button>
+          </div>
+        </div>
+        <div class="verdict-panel" id="verdict-panel">
+          <div class="verdict-placeholder" id="verdict-placeholder">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p>Preencha o perfil do cliente<br>e a situacao do acionamento<br>para receber a analise</p>
+          </div>
+          <div id="verdict-result" style="display:none; padding: 16px; display:none; flex-direction:column; gap:12px;"></div>
+        </div>
+        <div class="status-bar">
+          <div class="status-dot" id="lib-status-dot"></div>
+          <span id="lib-status-bar-text">Pronto para analisar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 var REGULAMENTO = [
   'REGULAMENTO DESTRAVE:',
-  'CARENCIA: plano novo=20 dias; troca de placa=20 dias; fatura vencida paga em atraso=bloqueio 7 dias uteis; inadimplencia 30+dias=cancelamento automatico; reativacao=nova carencia 20 dias.',
+  'CARENCIA: plano novo=20 dias; troca de placa=20 dias; fatura vencida paga em atraso=bloqueio 7 dias uteis; inadimplencia 30+dias=cancelamento automatico.',
   'LIMITES: guincho/reboque intervalo minimo 30 dias entre usos; planos ate mai/2024=6 acionamentos/ano (2 a cada 2 meses); 24h/7 dias em todo Brasil.',
   'COBRE: urgencia/emergencia (veiculo EM USO com pane inesperada impedindo continuar trajeto); acidente; pane mecanica/eletrica/seca em transito; pneu furado (cliente precisa ter macaco+chave de roda+estepe calibrado); chave perdida/trancada/quebrada (ate R$200); bateria descarregada; vias publicas e garagens com acesso a via publica.',
   'NAO COBRE: conveniencia (veiculo parado em local seguro/garagem/residencia sem estar em uso); motorhome/carga/utilitarios pesados; placa diferente da cadastrada; pecas/funilaria/consertos; reembolso; guarda de veiculo em base; alteracao de endereco apos acionamento; locais sem via publica; fora do periodo de assinatura; ma-fe/fraude.',
-  'LIMITES DOS SERVICOS: guincho ate 100km (km extra cobrado); pane seca=guincho ate posto mais proximo ate 50km (nao leva galao-proibido por lei); taxi=apenas com guincho em andamento ate 50km fora cidade; chaveiro ate R$200.',
-  'PAGAMENTO: cartao ou PIX (sem debito automatico); sem juros/multa mas bloqueia 7 dias uteis; reajuste previsto nos Termos de Uso.'
+  'LIMITES DOS SERVICOS: guincho ate 100km (km extra cobrado); pane seca=guincho ate posto mais proximo ate 50km; taxi=apenas com guincho em andamento ate 50km fora cidade; chaveiro ate R$200.',
+  'POLITICA DE EXCECAO: clientes com longo historico de assinatura, pagamento em dia e baixo uso podem ter excecoes avaliadas caso a caso pela lideranca, especialmente para servicos menores como carga de bateria e troca de pneu.'
 ].join(' ');
 
 var situacaoAtual = 'recusa-acionamento';
 var tomAtual = 'proximo e empatico';
 var mensagensGeradas = [];
 var historico = [];
+var msgVeredictoAtual = '';
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
 
 function selectSit(btn) {
   document.querySelectorAll('.sit-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -256,6 +409,12 @@ function setStatus(tipo, texto) {
   var dot = document.getElementById('status-dot');
   dot.className = 'status-dot' + (tipo === 'ready' ? ' ready' : tipo === 'loading' ? ' loading' : '');
   document.getElementById('status-text').textContent = texto;
+}
+
+function setLibStatus(tipo, texto) {
+  var dot = document.getElementById('lib-status-dot');
+  dot.className = 'status-dot' + (tipo === 'ready' ? ' ready' : tipo === 'loading' ? ' loading' : '');
+  document.getElementById('lib-status-bar-text').textContent = texto;
 }
 
 function showToast(msg) {
@@ -290,20 +449,17 @@ function renderMensagens(msgs, nome, streaming) {
   var chat = document.getElementById('chat-area');
   document.getElementById('chat-placeholder').style.display = 'none';
   chat.querySelectorAll('.msg-in, .msg-out-wrap, .seq-label').forEach(function(e) { e.remove(); });
-
   var contexto = document.getElementById('contexto').value.trim();
   if (contexto) {
     var inEl = document.createElement('div');
     inEl.className = 'msg-in';
     inEl.innerHTML = '<div class="msg-in-label">Cliente</div>' + escHtml(contexto.slice(0, 120)) + (contexto.length > 120 ? '...' : '');
     chat.appendChild(inEl);
-
     var seqEl = document.createElement('div');
     seqEl.className = 'seq-label';
     seqEl.textContent = '— ' + msgs.length + ' mensagem' + (msgs.length > 1 ? 's' : '') + ' sugerida' + (msgs.length > 1 ? 's' : '') + ' —';
     chat.appendChild(seqEl);
   }
-
   for (var i = 0; i < msgs.length; i++) {
     var wrap = document.createElement('div');
     wrap.className = 'msg-out-wrap';
@@ -336,17 +492,14 @@ function renderMensagens(msgs, nome, streaming) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-function buildPrompt(nome, contexto) {
+function buildPromptWA(nome, contexto) {
   return [
     'Voce e do time de atendimento da Destrave, empresa brasileira de assistencia veicular por assinatura (destrave.se).',
     'Redija mensagens de WhatsApp para responder o cliente ' + nome + '.',
-    '',
     'SITUACAO: ' + getSitLabel(situacaoAtual),
     'CONTEXTO / MENSAGEM DO CLIENTE: ' + contexto,
     'TOM SOLICITADO: ' + tomAtual,
-    '',
     REGULAMENTO,
-    '',
     'REGRAS DE TOM:',
     '- Primeira mensagem: "Ola, ' + nome + '! Tudo bem?"',
     '- Linguagem proxima, humana, profissional',
@@ -356,42 +509,84 @@ function buildPrompt(nome, contexto) {
     '- Em recusa ou bloqueio: SEMPRE ofereça o servico avulso',
     '- Finalize com emoji de coracao verde quando o tom for proximo',
     '- Mensagens curtas e diretas - WhatsApp nao e email',
-    '',
     'FORMATO OBRIGATORIO:',
     '[MENSAGEM 1]',
     'texto da primeira mensagem',
-    '',
     '[MENSAGEM 2]',
     'texto da segunda mensagem',
-    '',
     '[MENSAGEM 3]',
     'texto da terceira mensagem (somente se necessario)',
-    '',
     'Sem markdown, sem asteriscos. Cada mensagem independente e pronta para enviar.'
   ].join('\n');
+}
+
+function buildPromptLiberacao(dados) {
+  return [
+    'Voce e um especialista em atendimento da Destrave, empresa de assistencia veicular por assinatura.',
+    'Analise o perfil do cliente e a situacao do acionamento e decida se deve LIBERAR ou NAO LIBERAR o atendimento.',
+    '',
+    'DADOS DO CLIENTE:',
+    '- Nome: ' + dados.nome,
+    '- Tempo de assinatura: ' + dados.tempo,
+    '- Status de pagamento: ' + dados.pagamento,
+    '- Ultimo uso do servico: ' + dados.ultimoUso,
+    '- Frequencia de uso historica: ' + dados.frequencia,
+    '',
+    'SITUACAO DO ACIONAMENTO:',
+    '- Servico solicitado: ' + dados.servico,
+    '- Localizacao do veiculo: ' + dados.local,
+    (dados.contexto ? '- Contexto adicional: ' + dados.contexto : ''),
+    '',
+    REGULAMENTO,
+    '',
+    'CRITERIOS DE DECISAO:',
+    '- Veiculo em transito com pane inesperada = situacao de urgencia, tende a LIBERAR',
+    '- Veiculo em residencia ou local seguro = convenienza, tende a NAO LIBERAR',
+    '- Excecoes possiveis para clientes com longo historico, pagamento em dia e baixo uso - especialmente para servicos menores (bateria, pneu)',
+    '- Dentro da carencia de 30 dias para guincho = NAO LIBERAR (salvo emergencia grave)',
+    '- Cliente inadimplente = NAO LIBERAR',
+    '- Analise o contexto completo: cliente bom com situacao duvidosa pode merecer excecao',
+    '',
+    'FORMATO DA RESPOSTA - use exatamente esta estrutura:',
+    '[VEREDICTO] LIBERAR ou NAO LIBERAR ou AVALIAR COM LIDERANCA',
+    '',
+    '[JUSTIFICATIVA]',
+    'Explique em 3 a 5 linhas o raciocinio da decisao, citando os fatores do perfil do cliente e as regras aplicadas.',
+    '',
+    '[MENSAGEM SUGERIDA]',
+    'Escreva uma mensagem de WhatsApp para enviar ao cliente, adequada ao veredicto. Tom proximo e empatico. Sem markdown.'
+  ].join('\n');
+}
+
+async function chamarAPI(prompt) {
+  var response = await fetch('/api/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!response.ok) throw new Error('Erro ' + response.status);
+  var data = await response.json();
+  if (data.content && data.content[0] && data.content[0].text) return data.content[0].text;
+  throw new Error('Resposta invalida da API');
 }
 
 async function gerarMensagens() {
   var nome = document.getElementById('nome').value.trim() || 'cliente';
   var contexto = document.getElementById('contexto').value.trim();
-
   if (!contexto) {
     document.getElementById('contexto').focus();
     document.getElementById('contexto').style.borderColor = '#E74C3C';
     setTimeout(function() { document.getElementById('contexto').style.borderColor = ''; }, 2000);
     return;
   }
-
   var chat = document.getElementById('chat-area');
   document.getElementById('chat-placeholder').style.display = 'none';
   chat.querySelectorAll('.msg-in, .msg-out-wrap, .seq-label, .loading-wrap').forEach(function(e) { e.remove(); });
-
   var lw = document.createElement('div');
   lw.className = 'loading-wrap';
   lw.innerHTML = '<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
   chat.appendChild(lw);
   chat.scrollTop = chat.scrollHeight;
-
   document.getElementById('btn-gerar').disabled = true;
   document.getElementById('btn-copiar-tudo').disabled = true;
   document.getElementById('btn-nova').disabled = true;
@@ -399,28 +594,9 @@ async function gerarMensagens() {
   document.getElementById('wa-avatar').textContent = nome.charAt(0).toUpperCase();
   document.getElementById('wa-nome').textContent = nome;
   document.getElementById('wa-status-text').textContent = 'digitando...';
-
   try {
-    var response = await fetch('/api/claude', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: buildPrompt(nome, contexto) }]
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Erro ' + response.status);
-    }
-
-    var data = await response.json();
+    var texto = await chamarAPI(buildPromptWA(nome, contexto));
     lw.remove();
-
-    var texto = '';
-    if (data.content && data.content[0] && data.content[0].text) {
-      texto = data.content[0].text;
-    }
-
     var finalMsgs = parseMensagens(texto);
     mensagensGeradas = finalMsgs;
     renderMensagens(finalMsgs, nome, false);
@@ -430,19 +606,106 @@ async function gerarMensagens() {
     document.getElementById('wa-status-text').textContent = 'online';
     document.getElementById('btn-copiar-tudo').disabled = false;
     document.getElementById('btn-nova').disabled = false;
-
   } catch(err) {
     var lw2 = document.querySelector('.loading-wrap');
     if (lw2) lw2.remove();
     setStatus('', 'Erro ao gerar. Tente novamente.');
     console.error(err);
   }
-
   document.getElementById('btn-gerar').disabled = false;
+}
+
+async function analisarAcionamento() {
+  var nome = document.getElementById('lib-nome').value.trim() || 'Cliente';
+  var tempo = document.getElementById('lib-tempo').value;
+  var pagamento = document.getElementById('lib-pagamento').value;
+  var ultimoUso = document.getElementById('lib-ultimo-uso').value;
+  var frequencia = document.getElementById('lib-frequencia').value;
+  var servico = document.getElementById('lib-servico').value;
+  var local = document.getElementById('lib-local').value;
+  var contexto = document.getElementById('lib-contexto').value.trim();
+
+  if (!tempo || !pagamento || !ultimoUso || !frequencia || !servico || !local) {
+    showToast('Preencha todos os campos obrigatorios');
+    return;
+  }
+
+  document.getElementById('lib-avatar').textContent = nome.charAt(0).toUpperCase();
+  document.getElementById('lib-nome-display').textContent = nome;
+  document.getElementById('lib-status-text').textContent = 'analisando...';
+  document.getElementById('btn-analisar').disabled = true;
+  document.getElementById('btn-copiar-msg').disabled = true;
+  setLibStatus('loading', 'Analisando perfil e situacao...');
+
+  document.getElementById('verdict-placeholder').style.display = 'none';
+  var resultEl = document.getElementById('verdict-result');
+  resultEl.style.display = 'flex';
+  resultEl.innerHTML = '<div class="loading-wrap" style="align-self:center;margin:auto"><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
+
+  try {
+    var texto = await chamarAPI(buildPromptLiberacao({
+      nome: nome, tempo: tempo, pagamento: pagamento,
+      ultimoUso: ultimoUso, frequencia: frequencia,
+      servico: servico, local: local, contexto: contexto
+    }));
+
+    var veredicto = 'analise';
+    var veredictoTexto = 'AVALIAR COM LIDERANCA';
+    var veredictoIcon = '⚠️';
+    if (texto.indexOf('NAO LIBERAR') !== -1 || texto.indexOf('NÃO LIBERAR') !== -1) {
+      veredicto = 'nao-libera';
+      veredictoTexto = 'NAO LIBERAR';
+      veredictoIcon = '🚫';
+    } else if (texto.indexOf('[VEREDICTO] LIBERAR') !== -1) {
+      veredicto = 'libera';
+      veredictoTexto = 'LIBERAR';
+      veredictoIcon = '✅';
+    }
+
+    var justPart = '';
+    var msgPart = '';
+    var justMatch = texto.match(/\[JUSTIFICATIVA\]([\s\S]*?)(\[MENSAGEM SUGERIDA\]|$)/);
+    var msgMatch = texto.match(/\[MENSAGEM SUGERIDA\]([\s\S]*?)$/);
+    if (justMatch) justPart = justMatch[1].trim();
+    if (msgMatch) msgPart = msgMatch[1].trim();
+
+    msgVeredictoAtual = msgPart;
+
+    resultEl.innerHTML = '';
+    var box = document.createElement('div');
+    box.className = 'verdict-box ' + veredicto;
+    box.innerHTML =
+      '<div class="verdict-badge ' + veredicto + '">' + veredictoIcon + ' ' + veredictoTexto + '</div>' +
+      '<div class="verdict-justificativa">' + escHtml(justPart) + '</div>' +
+      (msgPart ? '<div class="verdict-msg-label">Mensagem sugerida para o cliente</div><div class="verdict-msg" title="Clique para copiar" id="verdict-msg-el">' + escHtml(msgPart) + '</div>' : '');
+    resultEl.appendChild(box);
+
+    if (msgPart) {
+      document.getElementById('verdict-msg-el').onclick = function() {
+        navigator.clipboard.writeText(msgPart).then(function() { showToast('Mensagem copiada'); });
+      };
+      document.getElementById('btn-copiar-msg').disabled = false;
+    }
+
+    setLibStatus('ready', 'Analise concluida');
+    document.getElementById('lib-status-text').textContent = veredictoTexto.toLowerCase();
+
+  } catch(err) {
+    resultEl.innerHTML = '<div style="padding:20px;color:var(--red);font-size:13px">Erro ao analisar. Tente novamente.</div>';
+    setLibStatus('', 'Erro na analise');
+    console.error(err);
+  }
+  document.getElementById('btn-analisar').disabled = false;
 }
 
 function copiarTudo() {
   navigator.clipboard.writeText(mensagensGeradas.join('\n\n---\n\n')).then(function() { showToast('Todas as mensagens copiadas'); });
+}
+
+function copiarMsgVeredicto() {
+  if (msgVeredictoAtual) {
+    navigator.clipboard.writeText(msgVeredictoAtual).then(function() { showToast('Mensagem copiada'); });
+  }
 }
 
 function renderHistorico() {
