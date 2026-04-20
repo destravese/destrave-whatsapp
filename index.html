@@ -558,11 +558,13 @@ function buildPromptLiberacao(dados) {
   ].join('\n');
 }
 
-async function chamarAPI(prompt) {
+async function chamarAPI(prompt, logData) {
+  var body = { messages: [{ role: 'user', content: prompt }] };
+  if (logData) body.log = logData;
   var response = await fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
+    body: JSON.stringify(body)
   });
   if (!response.ok) throw new Error('Erro ' + response.status);
   var data = await response.json();
@@ -595,7 +597,8 @@ async function gerarMensagens() {
   document.getElementById('wa-nome').textContent = nome;
   document.getElementById('wa-status-text').textContent = 'digitando...';
   try {
-    var texto = await chamarAPI(buildPromptWA(nome, contexto));
+    var logWA = { tipo: 'whatsapp', situacao: getSitLabel(situacaoAtual), nome: nome, hora: new Date().toISOString() };
+    var texto = await chamarAPI(buildPromptWA(nome, contexto), logWA);
     lw.remove();
     var finalMsgs = parseMensagens(texto);
     mensagensGeradas = finalMsgs;
@@ -662,6 +665,9 @@ async function analisarAcionamento() {
       veredictoIcon = '✅';
     }
 
+    var logLib = { tipo: 'liberacao', veredicto: veredicto, servico: servico, nome: nome, local: local, hora: new Date().toISOString() };
+    await chamarAPI(buildPromptLiberacao({ nome: nome, tempo: tempo, pagamento: pagamento, ultimoUso: ultimoUso, frequencia: frequencia, servico: servico, local: local, contexto: 'LOG_ONLY' }), logLib).catch(function(){});
+
     var justPart = '';
     var msgPart = '';
     var justMatch = texto.match(/\[JUSTIFICATIVA\]([\s\S]*?)(\[MENSAGEM SUGERIDA\]|$)/);
@@ -674,10 +680,19 @@ async function analisarAcionamento() {
     resultEl.innerHTML = '';
     var box = document.createElement('div');
     box.className = 'verdict-box ' + veredicto;
+
+    var avulsoHtml = '';
+    if (veredicto === 'nao-libera') {
+      avulsoHtml = '<div style="margin-top:14px;padding:12px 14px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:8px;font-size:12px;color:#F5A623;">' +
+        '<strong>⚡ Lembrete:</strong> Ofereça o servico avulso ao cliente. Informe que pode realizar um orcamento no momento e, mediante aprovacao, encaminhar um prestador normalmente.' +
+        '</div>';
+    }
+
     box.innerHTML =
       '<div class="verdict-badge ' + veredicto + '">' + veredictoIcon + ' ' + veredictoTexto + '</div>' +
       '<div class="verdict-justificativa">' + escHtml(justPart) + '</div>' +
-      (msgPart ? '<div class="verdict-msg-label">Mensagem sugerida para o cliente</div><div class="verdict-msg" title="Clique para copiar" id="verdict-msg-el">' + escHtml(msgPart) + '</div>' : '');
+      avulsoHtml +
+      (msgPart ? '<div class="verdict-msg-label" style="margin-top:14px">Mensagem sugerida para o cliente</div><div class="verdict-msg" title="Clique para copiar" id="verdict-msg-el">' + escHtml(msgPart) + '</div>' : '');
     resultEl.appendChild(box);
 
     if (msgPart) {
