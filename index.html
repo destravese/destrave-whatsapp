@@ -3,753 +3,616 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Destrave · Atendimento</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Atendimento · Destrave</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0A0F0D;
-  --surface: #111A15;
-  --surface2: #182210;
-  --card: #1A2B1E;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #EFF5F0;
-  --text2: #8FA894;
-  --text3: #5A7060;
-  --green: #25D366;
-  --green-light: rgba(37,211,102,0.12);
-  --green-glow: rgba(37,211,102,0.06);
-  --bubble-out: #1F5C35;
-  --bubble-in: #1E2A20;
-  --amber: #F5A623;
-  --amber-light: rgba(245,166,35,0.12);
-  --red: #E74C3C;
-  --red-light: rgba(231,76,60,0.12);
-  --radius: 16px;
-  --radius-sm: 10px;
+  --verde: #4db86a;
+  --verde-escuro: #3a9a54;
+  --verde-bg: #0d2a16;
+  --verde-leve: rgba(77,184,106,0.12);
+  --navy: #0b2232;
+  --navy2: #0f2d44;
+  --navy3: #163654;
+  --azul: #4a6fad;
+  --laranja: #e8623a;
+  --branco: #f5f9f6;
+  --cinza1: #e8ede9;
+  --cinza2: #a8b8aa;
+  --cinza3: #4a5a4c;
+  --cinza4: #2a3a2c;
+  --text: #deeade;
+  --text2: #8aab8e;
+  --borda: rgba(77,184,106,0.18);
+  --borda2: rgba(77,184,106,0.08);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px 40px; }
-.app { max-width: 960px; margin: 0 auto; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:var(--navy);color:var(--text);min-height:100vh;line-height:1.5}
 
-.header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-.logo-wrap { width: 44px; height: 44px; background: var(--green); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.logo-wrap svg { width: 24px; height: 24px; }
-.header-text h1 { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
-.header-text p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+/* ══ SCROLLBAR ══ */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--cinza3);border-radius:3px}
 
-.tabs { display: flex; gap: 6px; margin-bottom: 24px; }
-.tab-btn { padding: 10px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--text2); transition: all 0.15s; }
-.tab-btn:hover { border-color: var(--green); color: var(--text); }
-.tab-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+/* ══ LOGIN ══ */
+#tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);background-image:radial-gradient(ellipse at 20% 60%,rgba(77,184,106,0.06) 0%,transparent 60%)}
+.login-wrap{width:100%;max-width:420px;padding:20px}
+.login-logo-area{text-align:center;margin-bottom:32px}
+.login-logo-svg{display:inline-block}
+.login-card{background:var(--navy2);border:1px solid var(--borda);border-radius:20px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.login-titulo{font-size:18px;font-weight:600;color:var(--branco);margin-bottom:6px;text-align:center}
+.login-sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:28px}
+.campo-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block;font-weight:500;letter-spacing:.3px}
+.campo-input{width:100%;background:var(--navy);border:1px solid var(--borda);border-radius:10px;padding:11px 14px;color:var(--branco);font-size:14px;outline:none;transition:border .2s,box-shadow .2s;margin-bottom:14px}
+.campo-input:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(77,184,106,0.15)}
+.campo-input::placeholder{color:var(--cinza3)}
+.btn-login{width:100%;padding:13px;background:var(--verde);color:#fff;font-weight:700;font-size:15px;border:none;border-radius:12px;cursor:pointer;margin-top:6px;transition:background .2s,transform .1s;letter-spacing:.3px}
+.btn-login:hover{background:var(--verde-escuro)}
+.btn-login:active{transform:scale(0.98)}
+.login-erro{margin-top:12px;font-size:13px;color:var(--laranja);text-align:center;display:none}
+.login-rodape{text-align:center;margin-top:20px;font-size:12px;color:var(--cinza3)}
 
-.layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
-@media (max-width: 700px) { .layout { grid-template-columns: 1fr; } }
+/* ══ APP ══ */
+#app{display:none;flex-direction:column;min-height:100vh}
 
-.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-.panel-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+/* TOP BAR */
+.topbar{background:var(--navy2);border-bottom:1px solid var(--borda2);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.topbar-nome{font-size:16px;font-weight:700;color:var(--branco);letter-spacing:-.3px}
+.topbar-badge{font-size:10px;background:var(--verde-bg);color:var(--verde);border:1px solid var(--borda);border-radius:20px;padding:2px 8px;font-weight:600;letter-spacing:.5px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-user{font-size:13px;color:var(--text2)}
+.topbar-avatar{width:30px;height:30px;border-radius:50%;background:var(--verde-bg);border:1px solid var(--borda);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--verde)}
+.btn-sair{font-size:12px;color:var(--text2);background:none;border:1px solid var(--borda);border-radius:8px;padding:5px 12px;cursor:pointer;transition:all .2s}
+.btn-sair:hover{color:var(--branco);border-color:var(--cinza3)}
 
-.situacao-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 18px; }
-.sit-btn { padding: 9px 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--text2); text-align: center; transition: all 0.15s; line-height: 1.3; }
-.sit-btn .sit-icon { display: block; font-size: 18px; margin-bottom: 4px; }
-.sit-btn:hover { border-color: var(--green); color: var(--text); background: var(--green-light); }
-.sit-btn.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
+/* TABS */
+.tabs-wrap{background:var(--navy2);border-bottom:1px solid var(--borda2);padding:0 24px;display:flex;gap:4px}
+.tab{padding:13px 18px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--branco)}
+.tab.ativa{color:var(--verde);border-bottom-color:var(--verde);font-weight:600}
 
-.field { margin-bottom: 14px; }
-.field label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
-.field input, .field textarea, .field select { width: 100%; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; resize: none; transition: border-color 0.15s; appearance: none; }
-.field input::placeholder, .field textarea::placeholder { color: var(--text3); }
-.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--green); }
-.field textarea { min-height: 80px; line-height: 1.5; }
-.field select option { background: #182210; }
+/* CONTEÚDO */
+.main{flex:1;padding:24px;max-width:1000px;margin:0 auto;width:100%}
 
-.sep { display: flex; align-items: center; gap: 8px; margin: 14px 0 12px; }
-.sep span { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
-.sep::before, .sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
 
-.tom-row { display: flex; gap: 6px; margin-bottom: 18px; }
-.tom-chip { flex: 1; padding: 8px 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--text2); text-align: center; transition: all 0.15s; }
-.tom-chip:hover { border-color: var(--green); color: var(--text); }
-.tom-chip.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
+/* CARD */
+.card{background:var(--navy2);border:1px solid var(--borda2);border-radius:16px;padding:20px}
+.card-titulo{font-size:13px;font-weight:600;color:var(--verde);margin-bottom:16px;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:7px}
+.card-titulo::before{content:'';display:block;width:3px;height:14px;background:var(--verde);border-radius:2px}
 
-.btn-gerar { width: 100%; padding: 13px; background: var(--green); color: #0A0F0D; border: none; border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.15s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.btn-gerar:hover { opacity: 0.88; }
-.btn-gerar:active { transform: scale(0.99); }
-.btn-gerar:disabled { opacity: 0.4; cursor: not-allowed; }
+/* FORM */
+.f-label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;margin-top:12px;font-weight:500}
+.f-input{width:100%;background:var(--navy);border:1px solid rgba(77,184,106,0.15);border-radius:10px;padding:10px 12px;color:var(--branco);font-size:13px;outline:none;transition:border .2s;resize:vertical;font-family:inherit}
+.f-input:focus{border-color:var(--verde)}
+.f-input::placeholder{color:var(--cinza3)}
 
-.output-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; min-height: 520px; display: flex; flex-direction: column; }
+/* RADIO TONE */
+.radio-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.radio-wrap label{padding:6px 14px;border-radius:20px;border:1px solid rgba(77,184,106,0.2);cursor:pointer;font-size:12px;color:var(--text2);transition:all .2s;user-select:none}
+.radio-wrap input{display:none}
+.radio-wrap label:has(input:checked){border-color:var(--verde);color:var(--verde);background:var(--verde-bg)}
 
-.wa-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
-.wa-avatar { width: 36px; height: 36px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #0A0F0D; flex-shrink: 0; }
-.wa-info { flex: 1; }
-.wa-name { font-size: 13px; font-weight: 600; color: var(--text); }
-.wa-status { font-size: 11px; color: var(--green); }
-.wa-actions { display: flex; gap: 8px; }
-.wa-action-btn { padding: 6px 12px; background: transparent; border: 1px solid var(--border2); border-radius: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
-.wa-action-btn:hover { border-color: var(--green); color: var(--green); }
-.wa-action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+/* BOTÕES */
+.btn{padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;letter-spacing:.2px}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--verde);color:#fff}
+.btn-primary:hover{background:var(--verde-escuro)}
+.btn-ghost{background:rgba(77,184,106,0.08);color:var(--verde);border:1px solid var(--borda)}
+.btn-ghost:hover{background:rgba(77,184,106,0.15)}
+.btn-block{width:100%;margin-top:16px}
 
-.chat-area { flex: 1; padding: 20px 16px; overflow-y: auto; background: var(--bg); background-image: radial-gradient(circle at 20% 80%, var(--green-glow) 0%, transparent 50%); display: flex; flex-direction: column; gap: 6px; }
-.chat-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 40px 20px; color: var(--text3); }
-.chat-placeholder svg { width: 36px; height: 36px; opacity: 0.2; }
-.chat-placeholder p { font-size: 13px; line-height: 1.6; }
+/* RESPOSTA */
+.resposta-box{background:var(--navy);border:1px solid var(--borda2);border-radius:12px;padding:16px;font-size:13px;line-height:1.8;white-space:pre-wrap;min-height:100px;color:var(--text);margin-top:12px}
+.resposta-placeholder{color:var(--cinza3);font-style:italic}
+.resposta-actions{display:flex;gap:8px;margin-top:10px}
 
-.msg-in { align-self: flex-start; max-width: 75%; background: var(--bubble-in); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px; padding: 10px 14px; font-size: 13px; line-height: 1.6; color: var(--text2); }
-.msg-in-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
-.msg-out-wrap { align-self: flex-end; max-width: 82%; display: flex; flex-direction: column; gap: 4px; }
-.msg-out { background: var(--bubble-out); border-radius: 16px 4px 16px 16px; padding: 11px 14px; font-size: 13px; line-height: 1.65; color: var(--text); position: relative; cursor: pointer; transition: opacity 0.15s; border: 1px solid rgba(37,211,102,0.15); white-space: pre-wrap; word-break: break-word; }
-.msg-out:hover { opacity: 0.85; }
-.msg-num { position: absolute; top: -8px; left: -8px; width: 18px; height: 18px; background: var(--green); color: #0A0F0D; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.msg-tick { text-align: right; font-size: 10px; color: var(--text3); margin-top: 4px; }
-.msg-tick span { color: #53BDEB; }
-.copy-hint { text-align: right; font-size: 10px; color: var(--text3); margin-top: 1px; }
-.seq-label { text-align: center; font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 0; margin: 4px 0; }
+/* PAINEL */
+.painel{display:none}
+.painel.ativo{display:block}
 
-.loading-wrap { display: flex; align-items: center; gap: 10px; padding: 16px; align-self: flex-end; }
-.typing-bubble { background: var(--bubble-out); border: 1px solid rgba(37,211,102,0.15); border-radius: 16px 4px 16px 16px; padding: 12px 16px; display: flex; gap: 5px; align-items: center; }
-.typing-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: typing 1.2s infinite; opacity: 0.5; }
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes typing { 0%,80%,100%{transform:translateY(0);opacity:.4} 40%{transform:translateY(-5px);opacity:1} }
+/* ══ BASE DE CONHECIMENTO ══ */
+.busca-wrap{position:relative;margin-bottom:16px}
+.busca-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--cinza3);pointer-events:none;font-size:15px}
+.busca-input{width:100%;background:var(--navy2);border:1px solid var(--borda);border-radius:12px;padding:12px 14px 12px 40px;color:var(--branco);font-size:14px;outline:none;transition:border .2s}
+.busca-input:focus{border-color:var(--verde)}
+.busca-input::placeholder{color:var(--cinza3)}
 
-.status-bar { padding: 8px 16px; border-top: 1px solid var(--border); background: var(--card); display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text3); }
-.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); }
-.status-dot.ready { background: var(--green); }
-.status-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.f-btn{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid rgba(77,184,106,0.2);background:transparent;color:var(--text2);transition:all .2s;font-weight:500}
+.f-btn.ativo{background:var(--verde-bg);color:var(--verde);border-color:var(--borda)}
+.f-btn:hover:not(.ativo){color:var(--branco)}
 
-.historico { margin-top: 14px; }
-.historico-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; padding: 0 4px; }
-.historico-item { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
-.historico-item:hover { border-color: var(--green); background: var(--green-light); }
-.historico-item-tipo { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
-.historico-item-nome { font-size: 13px; color: var(--text); font-weight: 500; margin-top: 2px; }
+.rb{background:var(--navy2);border:1px solid var(--borda2);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color .2s}
+.rb:hover{border-color:var(--borda)}
+.rb.novo{border-color:rgba(77,184,106,0.3);background:rgba(13,42,22,0.5)}
+.rb-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.rb-titulo{font-size:14px;font-weight:600;color:var(--branco);margin-bottom:4px}
+.rb-desc{font-size:13px;color:var(--text2)}
+.rb-detalhe{display:none;margin-top:12px;padding:14px;background:var(--navy);border-radius:10px;font-size:13px;line-height:1.8;color:var(--text);white-space:pre-line;border-left:3px solid var(--verde)}
+.rb.expandido .rb-detalhe{display:block}
+.rb-correto{color:var(--verde);margin-top:10px;font-weight:500}
+.rb-regra{color:var(--azul);margin-top:6px;font-size:12px;font-style:italic}
+.sem-resultado{text-align:center;color:var(--cinza3);padding:48px 0;font-size:14px}
+.sem-resultado strong{color:var(--text2)}
 
-.verdict-panel { flex: 1; display: flex; flex-direction: column; }
-.verdict-box { margin: 16px; border-radius: var(--radius-sm); padding: 20px; border: 2px solid; }
-.verdict-box.libera { border-color: var(--green); background: rgba(37,211,102,0.06); }
-.verdict-box.nao-libera { border-color: var(--red); background: rgba(231,76,60,0.06); }
-.verdict-box.analise { border-color: var(--amber); background: rgba(245,166,35,0.06); }
-.verdict-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 20px; margin-bottom: 12px; }
-.verdict-badge.libera { background: var(--green-light); color: var(--green); }
-.verdict-badge.nao-libera { background: var(--red-light); color: var(--red); }
-.verdict-badge.analise { background: var(--amber-light); color: var(--amber); }
-.verdict-justificativa { font-size: 13px; line-height: 1.7; color: var(--text2); margin-bottom: 16px; white-space: pre-wrap; }
-.verdict-msg-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
-.verdict-msg { background: var(--bubble-out); border: 1px solid rgba(37,211,102,0.15); border-radius: 12px; padding: 12px 14px; font-size: 13px; line-height: 1.65; color: var(--text); white-space: pre-wrap; cursor: pointer; transition: opacity 0.15s; }
-.verdict-msg:hover { opacity: 0.85; }
+/* BADGES */
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600}
+.badge-verde{background:var(--verde-bg);color:var(--verde);border:1px solid rgba(77,184,106,0.3)}
+.badge-azul{background:rgba(74,111,173,0.15);color:#7aaaf5;border:1px solid rgba(74,111,173,0.3)}
+.badge-laranja{background:rgba(232,98,58,0.12);color:#f0906a;border:1px solid rgba(232,98,58,0.3)}
+.badge-cinza{background:rgba(255,255,255,0.05);color:var(--text2);border:1px solid rgba(255,255,255,0.1)}
 
-.verdict-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 40px 20px; color: var(--text3); }
-.verdict-placeholder p { font-size: 13px; line-height: 1.6; }
-
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--green); color: #0A0F0D; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 100; white-space: nowrap; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* VAZIO */
+.base-vazio{text-align:center;padding:40px;color:var(--cinza3)}
 </style>
 </head>
 <body>
-<div class="app">
 
-  <div class="header">
-    <div class="logo-wrap">
-      <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+<!-- ══ LOGIN ══════════════════════════════════════════════ -->
+<div id="tela-login">
+  <div class="login-wrap">
+    <div class="login-logo-area">
+      <!-- Logo SVG inline baseado no logo verde da Destrave -->
+      <svg width="210" height="60" viewBox="0 0 210 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Haste vertical do D -->
+        <rect x="3.5" y="5" width="9" height="50" rx="4.5" fill="#4db86a"/>
+        <!-- Traço horizontal (sai pela esquerda da haste) -->
+        <rect x="0" y="25" width="38" height="9" rx="4.5" fill="#4db86a"/>
+        <!-- Arco superior do D -->
+        <path d="M10 6 Q44 6 44 30" stroke="#4db86a" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Arco inferior do D -->
+        <path d="M44 30 Q44 54 10 54" stroke="#4db86a" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- "estrave" em fonte arredondada -->
+        <text x="56" y="43" font-family="Nunito,Varela Round,Poppins,system-ui,sans-serif" font-size="36" font-weight="800" fill="#4db86a" letter-spacing="-1.2">estrave</text>
+      </svg>
     </div>
-    <div class="header-text">
-      <h1>Atendimento Destrave</h1>
-      <p>Assistente de respostas e analise de acionamento</p>
+    <div class="login-card">
+      <div class="login-titulo">Bem-vinda ao sistema</div>
+      <div class="login-sub">Painel interno de atendimento</div>
+      <label class="campo-label">Usuário</label>
+      <input class="campo-input" id="login-user" type="text" placeholder="Seu nome" autocomplete="username">
+      <label class="campo-label">Senha</label>
+      <input class="campo-input" id="login-senha" type="password" placeholder="••••••••" autocomplete="current-password">
+      <button class="btn-login" onclick="fazerLogin()">Entrar →</button>
+      <div id="login-erro" class="login-erro">⚠️ Usuário ou senha incorretos</div>
     </div>
+    <div class="login-rodape">Destrave · Sistema interno · v2.0</div>
   </div>
-
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('whatsapp', this)">💬 Respostas WhatsApp</button>
-    <button class="tab-btn" onclick="switchTab('liberacao', this)">🔍 Liberacao de Acionamento</button>
-  </div>
-
-  <!-- ABA 1: RESPOSTAS WHATSAPP -->
-  <div class="tab-content active" id="tab-whatsapp">
-    <div class="layout">
-      <div>
-        <div class="panel">
-          <div class="panel-label">Situacao do cliente</div>
-          <div class="situacao-grid">
-            <button class="sit-btn active" data-sit="recusa-acionamento" onclick="selectSit(this)"><span class="sit-icon">🚫</span>Recusa de acionamento</button>
-            <button class="sit-btn" data-sit="bloqueio-atraso" onclick="selectSit(this)"><span class="sit-icon">⏸️</span>Bloqueio por atraso</button>
-            <button class="sit-btn" data-sit="cobranca" onclick="selectSit(this)"><span class="sit-icon">💰</span>Cobranca</button>
-            <button class="sit-btn" data-sit="cancelamento" onclick="selectSit(this)"><span class="sit-icon">📋</span>Cancelamento</button>
-            <button class="sit-btn" data-sit="reclamacao" onclick="selectSit(this)"><span class="sit-icon">😤</span>Reclamacao</button>
-            <button class="sit-btn" data-sit="duvida-plano" onclick="selectSit(this)"><span class="sit-icon">❓</span>Duvida plano</button>
-            <button class="sit-btn" data-sit="acionamento-ok" onclick="selectSit(this)"><span class="sit-icon">✅</span>Acionamento OK</button>
-            <button class="sit-btn" data-sit="outro" onclick="selectSit(this)"><span class="sit-icon">💬</span>Outro</button>
-          </div>
-          <div class="sep"><span>Dados</span></div>
-          <div class="field"><label>Nome do cliente</label><input type="text" id="nome" placeholder="Ex: Carlos"></div>
-          <div class="field"><label>Mensagem / contexto</label><textarea id="contexto" placeholder="Cole a mensagem do cliente ou descreva o que aconteceu..."></textarea></div>
-          <div class="sep"><span>Tom</span></div>
-          <div class="tom-row">
-            <button class="tom-chip active" data-tom="proximo e empatico" onclick="selectTom(this)">Proximo</button>
-            <button class="tom-chip" data-tom="firme e direto" onclick="selectTom(this)">Firme</button>
-            <button class="tom-chip" data-tom="conciliador" onclick="selectTom(this)">Conciliador</button>
-          </div>
-          <button class="btn-gerar" id="btn-gerar" onclick="gerarMensagens()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-            Gerar sequencia
-          </button>
-        </div>
-        <div class="historico" id="historico" style="display:none">
-          <div class="historico-title">Sessao atual</div>
-          <div id="historico-lista"></div>
-        </div>
-      </div>
-
-      <div class="output-panel">
-        <div class="wa-header">
-          <div class="wa-avatar" id="wa-avatar">D</div>
-          <div class="wa-info">
-            <div class="wa-name" id="wa-nome">Atendimento Destrave</div>
-            <div class="wa-status" id="wa-status-text">aguardando...</div>
-          </div>
-          <div class="wa-actions">
-            <button class="wa-action-btn" id="btn-copiar-tudo" onclick="copiarTudo()" disabled>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar tudo
-            </button>
-            <button class="wa-action-btn" id="btn-nova" onclick="gerarMensagens()" disabled>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-              Nova versao
-            </button>
-          </div>
-        </div>
-        <div class="chat-area" id="chat-area">
-          <div class="chat-placeholder" id="chat-placeholder">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/></svg>
-            <p>Preencha os dados ao lado<br>e clique em <strong>Gerar sequencia</strong></p>
-          </div>
-        </div>
-        <div class="status-bar">
-          <div class="status-dot" id="status-dot"></div>
-          <span id="status-text">Pronto para gerar</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ABA 2: LIBERACAO DE ACIONAMENTO -->
-  <div class="tab-content" id="tab-liberacao">
-    <div class="layout">
-      <div>
-        <div class="panel">
-          <div class="panel-label">Perfil do cliente</div>
-          <div class="field"><label>Nome do cliente</label><input type="text" id="lib-nome" placeholder="Ex: Daniel Souza"></div>
-          <div class="field">
-            <label>Tempo de assinatura</label>
-            <select id="lib-tempo">
-              <option value="">Selecione...</option>
-              <option value="menos de 3 meses">Menos de 3 meses</option>
-              <option value="3 a 6 meses">3 a 6 meses</option>
-              <option value="6 meses a 1 ano">6 meses a 1 ano</option>
-              <option value="1 a 2 anos">1 a 2 anos</option>
-              <option value="mais de 2 anos">Mais de 2 anos</option>
-              <option value="mais de 4 anos">Mais de 4 anos</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Status de pagamento</label>
-            <select id="lib-pagamento">
-              <option value="">Selecione...</option>
-              <option value="em dia, nunca atrasou">Em dia, nunca atrasou</option>
-              <option value="em dia, ja atrasou algumas vezes">Em dia, ja atrasou algumas vezes</option>
-              <option value="atrasado recentemente">Atrasado recentemente</option>
-              <option value="inadimplente">Inadimplente</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Ultimo uso do servico</label>
-            <select id="lib-ultimo-uso">
-              <option value="">Selecione...</option>
-              <option value="nunca usou">Nunca usou</option>
-              <option value="ha mais de 6 meses">Ha mais de 6 meses</option>
-              <option value="ha 2 a 6 meses">Ha 2 a 6 meses</option>
-              <option value="ha 30 a 60 dias">Ha 30 a 60 dias</option>
-              <option value="ha menos de 30 dias">Ha menos de 30 dias (dentro da carencia)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Frequencia de uso historica</label>
-            <select id="lib-frequencia">
-              <option value="">Selecione...</option>
-              <option value="usa muito pouco (1 a 2 vezes no historico)">Usa muito pouco (1-2 vezes no historico)</option>
-              <option value="uso moderado">Uso moderado</option>
-              <option value="usa com frequencia">Usa com frequencia</option>
-              <option value="uso excessivo ou suspeito">Uso excessivo ou suspeito</option>
-            </select>
-          </div>
-
-          <div class="sep"><span>Situacao do acionamento</span></div>
-
-          <div class="field">
-            <label>Servico solicitado</label>
-            <select id="lib-servico">
-              <option value="">Selecione...</option>
-              <option value="guincho/reboque">Guincho / Reboque</option>
-              <option value="carga de bateria">Carga de bateria</option>
-              <option value="troca de pneu">Troca de pneu</option>
-              <option value="chaveiro">Chaveiro</option>
-              <option value="pane seca">Pane seca</option>
-              <option value="taxi">Taxi</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Onde o veiculo esta agora</label>
-            <select id="lib-local">
-              <option value="">Selecione...</option>
-              <option value="em transito, parou durante uso">Em transito, parou durante o uso</option>
-              <option value="na residencia do cliente">Na residencia do cliente</option>
-              <option value="em garagem ou estacionamento">Em garagem ou estacionamento</option>
-              <option value="em via publica, local seguro">Em via publica, local seguro</option>
-              <option value="em local de risco ou inseguro">Em local de risco ou inseguro</option>
-              <option value="em estrada ou rodovia">Em estrada ou rodovia</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Contexto adicional <span style="color:var(--text3);font-weight:400">(opcional)</span></label>
-            <textarea id="lib-contexto" placeholder="Qualquer informacao relevante que ajude na analise..."></textarea>
-          </div>
-
-          <button class="btn-gerar" id="btn-analisar" onclick="analisarAcionamento()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            Analisar acionamento
-          </button>
-        </div>
-      </div>
-
-      <div class="output-panel">
-        <div class="wa-header">
-          <div class="wa-avatar" id="lib-avatar" style="background:#5A7060">?</div>
-          <div class="wa-info">
-            <div class="wa-name" id="lib-nome-display">Analise de acionamento</div>
-            <div class="wa-status" id="lib-status-text">aguardando dados...</div>
-          </div>
-          <div class="wa-actions">
-            <button class="wa-action-btn" id="btn-copiar-msg" onclick="copiarMsgVeredicto()" disabled>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-              Copiar mensagem
-            </button>
-          </div>
-        </div>
-        <div class="verdict-panel" id="verdict-panel">
-          <div class="verdict-placeholder" id="verdict-placeholder">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <p>Preencha o perfil do cliente<br>e a situacao do acionamento<br>para receber a analise</p>
-          </div>
-          <div id="verdict-result" style="display:none; padding: 16px; display:none; flex-direction:column; gap:12px;"></div>
-        </div>
-        <div class="status-bar">
-          <div class="status-dot" id="lib-status-dot"></div>
-          <span id="lib-status-bar-text">Pronto para analisar</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
-<div class="toast" id="toast"></div>
+
+<!-- ══ APP ═════════════════════════════════════════════════ -->
+<div id="app">
+
+  <div class="topbar">
+    <div class="topbar-logo">
+      <svg width="132" height="36" viewBox="0 0 132 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="3" width="5.5" height="30" rx="2.75" fill="#4db86a"/>
+        <rect x="0" y="14.5" width="22.5" height="5.5" rx="2.75" fill="#4db86a"/>
+        <path d="M6 3.5 Q26 3.5 26 18" stroke="#4db86a" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <path d="M26 18 Q26 32.5 6 32.5" stroke="#4db86a" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <text x="32" y="25.5" font-family="Nunito,Varela Round,Poppins,system-ui,sans-serif" font-size="21" font-weight="800" fill="#4db86a" letter-spacing="-0.6">estrave</text>
+      </svg>
+      <span class="topbar-badge">ATENDIMENTO</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user">Olá, <span id="nome-usuario" style="color:var(--branco);font-weight:600"></span></div>
+      <div class="topbar-avatar" id="avatar-letra">C</div>
+      <button class="btn-sair" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tab ativa" onclick="aba('respostas',this)">💬 Respostas WhatsApp</div>
+    <div class="tab" onclick="aba('socorro',this)">🔍 Liberação de Acionamento</div>
+    <div class="tab" onclick="aba('base',this)">📋 Base de Conhecimento</div>
+  </div>
+
+  <div class="main">
+
+    <!-- ── ABA RESPOSTAS ───────────────────────────────── -->
+    <div id="painel-respostas" class="painel ativo">
+      <div class="grid2">
+        <div class="card">
+          <div class="card-titulo">Dados do atendimento</div>
+
+          <label class="f-label">Situação do cliente</label>
+          <select class="f-input" id="situacao">
+            <option value="">Selecione...</option>
+            <option>🚫 Recusa de acionamento</option>
+            <option>⏸️ Bloqueio por atraso</option>
+            <option>💰 Cobrança</option>
+            <option>📋 Cancelamento</option>
+            <option>😤 Reclamação</option>
+            <option>❓ Dúvida plano</option>
+            <option>✅ Acionamento OK</option>
+            <option>💬 Outro</option>
+          </select>
+
+          <label class="f-label">Nome do cliente</label>
+          <input class="f-input" type="text" id="nome-cliente" placeholder="Ex: João Silva">
+
+          <label class="f-label">Mensagem / contexto</label>
+          <textarea class="f-input" id="contexto" rows="5" placeholder="Cole a mensagem do cliente ou descreva a situação..."></textarea>
+
+          <label class="f-label">Tom</label>
+          <div class="radio-wrap">
+            <label><input type="radio" name="tom" value="Próximo" checked><span>Próximo</span></label>
+            <label><input type="radio" name="tom" value="Firme"><span>Firme</span></label>
+            <label><input type="radio" name="tom" value="Conciliador"><span>Conciliador</span></label>
+          </div>
+
+          <button class="btn btn-primary btn-block" onclick="gerarResposta()">Gerar sequência</button>
+        </div>
+
+        <div class="card">
+          <div class="card-titulo">Sessão atual</div>
+          <div id="resposta-whats" class="resposta-box"><span class="resposta-placeholder">Preencha os dados ao lado e clique em Gerar sequência</span></div>
+          <div class="resposta-actions">
+            <button class="btn btn-ghost" onclick="copiar('resposta-whats')">Copiar</button>
+            <button class="btn btn-ghost" onclick="novaConversa()">Nova</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ABA SOCORRO ────────────────────────────────── -->
+    <div id="painel-socorro" class="painel">
+      <div class="grid2">
+        <div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-titulo">Perfil do cliente</div>
+
+            <label class="f-label">Nome do cliente</label>
+            <input class="f-input" type="text" id="sc-nome" placeholder="Ex: Maria Souza">
+
+            <label class="f-label">Tempo de assinatura</label>
+            <select class="f-input" id="sc-tempo">
+              <option value="">Selecione...</option>
+              <option>Menos de 3 meses</option>
+              <option>3 a 6 meses</option>
+              <option>6 meses a 1 ano</option>
+              <option>1 a 2 anos</option>
+              <option>Mais de 2 anos</option>
+              <option>Mais de 4 anos</option>
+            </select>
+
+            <label class="f-label">Status de pagamento</label>
+            <select class="f-input" id="sc-pag">
+              <option value="">Selecione...</option>
+              <option>Em dia, nunca atrasou</option>
+              <option>Em dia, já atrasou algumas vezes</option>
+              <option>Atrasado recentemente</option>
+              <option>Inadimplente</option>
+            </select>
+
+            <label class="f-label">Último uso do serviço</label>
+            <select class="f-input" id="sc-uso">
+              <option value="">Selecione...</option>
+              <option>Nunca usou</option>
+              <option>Há mais de 6 meses</option>
+              <option>Há 2 a 6 meses</option>
+              <option>Há 30 a 60 dias</option>
+              <option>Há menos de 30 dias (dentro da carência)</option>
+            </select>
+
+            <label class="f-label">Frequência histórica de uso</label>
+            <select class="f-input" id="sc-freq">
+              <option value="">Selecione...</option>
+              <option>Usa muito pouco (1–2 vezes no histórico)</option>
+              <option>Uso moderado</option>
+              <option>Usa com frequência</option>
+              <option>Uso excessivo ou suspeito</option>
+            </select>
+          </div>
+
+          <div class="card">
+            <div class="card-titulo">Situação do acionamento</div>
+
+            <label class="f-label">Serviço solicitado</label>
+            <select class="f-input" id="sc-servico">
+              <option value="">Selecione...</option>
+              <option>Guincho / Reboque</option>
+              <option>Carga de bateria</option>
+              <option>Troca de pneu</option>
+              <option>Chaveiro</option>
+              <option>Pane seca</option>
+              <option>Táxi</option>
+            </select>
+
+            <label class="f-label">Onde o veículo está</label>
+            <select class="f-input" id="sc-local">
+              <option value="">Selecione...</option>
+              <option>Em trânsito, parou durante o uso</option>
+              <option>Na residência do cliente</option>
+              <option>Em garagem ou estacionamento</option>
+              <option>Em via pública, local seguro</option>
+              <option>Em local de risco ou inseguro</option>
+              <option>Em estrada ou rodovia</option>
+            </select>
+
+            <label class="f-label">Contexto adicional (opcional)</label>
+            <textarea class="f-input" id="sc-contexto" rows="3" placeholder="Detalhes do caso..."></textarea>
+
+            <button class="btn btn-primary btn-block" onclick="analisarSocorro()">Analisar acionamento</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-titulo">Análise de acionamento</div>
+          <div id="resposta-socorro" class="resposta-box"><span class="resposta-placeholder">Preencha o perfil do cliente e a situação do acionamento para receber a análise</span></div>
+          <div class="resposta-actions">
+            <button class="btn btn-ghost" onclick="copiar('resposta-socorro')">Copiar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ABA BASE DE CONHECIMENTO ───────────────────── -->
+    <div id="painel-base" class="painel">
+      <div class="busca-wrap">
+        <span class="busca-icon">🔎</span>
+        <input class="busca-input" type="text" id="busca-base" placeholder="Buscar: carência, bateria, troca de placa, plano errado, vindi..." oninput="filtrarBase()">
+      </div>
+
+      <div class="filtros">
+        <button class="f-btn ativo" onclick="setFiltro('todos',this)">Todos</button>
+        <button class="f-btn" onclick="setFiltro('regra',this)">Regras</button>
+        <button class="f-btn" onclick="setFiltro('processo',this)">Processos</button>
+        <button class="f-btn" onclick="setFiltro('erro',this)">Casos de erro</button>
+        <button class="f-btn" onclick="setFiltro('socorro',this)">Socorro</button>
+        <button class="f-btn" onclick="setFiltro('vindi',this)">Vindi</button>
+      </div>
+
+      <div id="lista-base"></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
 
 <script>
-var REGULAMENTO = [
-  'REGULAMENTO DESTRAVE:',
-  'CARENCIA: plano novo=20 dias; troca de placa=20 dias; fatura vencida paga em atraso=bloqueio 7 dias uteis; inadimplencia 30+dias=cancelamento automatico.',
-  'LIMITES: guincho/reboque intervalo minimo 30 dias entre usos; planos ate mai/2024=6 acionamentos/ano (2 a cada 2 meses); 24h/7 dias em todo Brasil.',
-  'COBRE: urgencia/emergencia (veiculo EM USO com pane inesperada impedindo continuar trajeto); acidente; pane mecanica/eletrica/seca em transito; pneu furado (cliente precisa ter macaco+chave de roda+estepe calibrado); chave perdida/trancada/quebrada (ate R$200); bateria descarregada; vias publicas e garagens com acesso a via publica.',
-  'NAO COBRE: conveniencia (veiculo parado em local seguro/garagem/residencia sem estar em uso); motorhome/carga/utilitarios pesados; placa diferente da cadastrada; pecas/funilaria/consertos; reembolso; guarda de veiculo em base; alteracao de endereco apos acionamento; locais sem via publica; fora do periodo de assinatura; ma-fe/fraude.',
-  'LIMITES DOS SERVICOS: guincho ate 100km (km extra cobrado); pane seca=guincho ate posto mais proximo ate 50km; taxi=apenas com guincho em andamento ate 50km fora cidade; chaveiro ate R$200.',
-  'POLITICA DE EXCECAO: clientes com longo historico de assinatura, pagamento em dia e baixo uso podem ter excecoes avaliadas caso a caso pela lideranca, especialmente para servicos menores como carga de bateria e troca de pneu.'
-].join(' ');
+// ══ AUTH ═══════════════════════════════════════════════════
+let usuarioLogado = null;
 
-var situacaoAtual = 'recusa-acionamento';
-var tomAtual = 'proximo e empatico';
-var mensagensGeradas = [];
-var historico = [];
-var msgVeredictoAtual = '';
-
-function switchTab(tab, btn) {
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-  btn.classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
+function fazerLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const senha = document.getElementById('login-senha').value;
+  fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usuario:user,senha})})
+    .then(r=>r.json()).then(d=>{
+      if(d.ok){
+        if(d.role==='admin'){ window.location.href='/dashboard'; return; }
+        usuarioLogado=d.nome;
+        document.getElementById('tela-login').style.display='none';
+        document.getElementById('app').style.display='flex';
+        document.getElementById('nome-usuario').textContent=cap(d.nome);
+        document.getElementById('avatar-letra').textContent=d.nome[0].toUpperCase();
+        carregarBase();
+      } else {
+        document.getElementById('login-erro').style.display='block';
+      }
+    }).catch(()=>document.getElementById('login-erro').style.display='block');
 }
 
-function selectSit(btn) {
-  document.querySelectorAll('.sit-btn').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-  situacaoAtual = btn.dataset.sit;
-}
-
-function selectTom(btn) {
-  document.querySelectorAll('.tom-chip').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-  tomAtual = btn.dataset.tom;
-}
-
-function getSitLabel(sit) {
-  var labels = {
-    'recusa-acionamento': 'Recusa de acionamento',
-    'bloqueio-atraso': 'Bloqueio por atraso de pagamento',
-    'cobranca': 'Cobranca / inadimplencia',
-    'cancelamento': 'Cancelamento',
-    'reclamacao': 'Reclamacao / insatisfacao',
-    'duvida-plano': 'Duvida sobre o plano',
-    'acionamento-ok': 'Acionamento autorizado',
-    'outro': 'Outro'
-  };
-  return labels[sit] || sit;
-}
-
-function setStatus(tipo, texto) {
-  var dot = document.getElementById('status-dot');
-  dot.className = 'status-dot' + (tipo === 'ready' ? ' ready' : tipo === 'loading' ? ' loading' : '');
-  document.getElementById('status-text').textContent = texto;
-}
-
-function setLibStatus(tipo, texto) {
-  var dot = document.getElementById('lib-status-dot');
-  dot.className = 'status-dot' + (tipo === 'ready' ? ' ready' : tipo === 'loading' ? ' loading' : '');
-  document.getElementById('lib-status-bar-text').textContent = texto;
-}
-
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2200);
-}
-
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function parseMensagens(texto) {
-  var blocos = texto.split(/\[MENSAGEM\s*\d+\]/);
-  var result = [];
-  for (var i = 0; i < blocos.length; i++) {
-    var b = blocos[i].trim();
-    if (b.length > 15) result.push(b);
-  }
-  if (result.length >= 2) return result;
-  var paras = texto.split(/\n{2,}/);
-  var fb = [];
-  for (var j = 0; j < paras.length; j++) {
-    var p = paras[j].trim();
-    if (p.length > 20) fb.push(p);
-  }
-  return fb.length >= 1 ? fb : [texto.trim()];
-}
-
-function renderMensagens(msgs, nome, streaming) {
-  var chat = document.getElementById('chat-area');
-  document.getElementById('chat-placeholder').style.display = 'none';
-  chat.querySelectorAll('.msg-in, .msg-out-wrap, .seq-label').forEach(function(e) { e.remove(); });
-  var contexto = document.getElementById('contexto').value.trim();
-  if (contexto) {
-    var inEl = document.createElement('div');
-    inEl.className = 'msg-in';
-    inEl.innerHTML = '<div class="msg-in-label">Cliente</div>' + escHtml(contexto.slice(0, 120)) + (contexto.length > 120 ? '...' : '');
-    chat.appendChild(inEl);
-    var seqEl = document.createElement('div');
-    seqEl.className = 'seq-label';
-    seqEl.textContent = '— ' + msgs.length + ' mensagem' + (msgs.length > 1 ? 's' : '') + ' sugerida' + (msgs.length > 1 ? 's' : '') + ' —';
-    chat.appendChild(seqEl);
-  }
-  for (var i = 0; i < msgs.length; i++) {
-    var wrap = document.createElement('div');
-    wrap.className = 'msg-out-wrap';
-    var bubble = document.createElement('div');
-    bubble.className = 'msg-out';
-    bubble.title = 'Clique para copiar';
-    (function(msgText) {
-      bubble.onclick = function() {
-        navigator.clipboard.writeText(msgText).then(function() { showToast('Mensagem copiada'); });
-      };
-    })(msgs[i]);
-    if (msgs.length > 1) {
-      var num = document.createElement('div');
-      num.className = 'msg-num';
-      num.textContent = i + 1;
-      bubble.appendChild(num);
-    }
-    bubble.appendChild(document.createTextNode(msgs[i]));
-    var tick = document.createElement('div');
-    tick.className = 'msg-tick';
-    tick.innerHTML = (streaming && i === msgs.length - 1) ? '🕐' : '<span>✓✓</span>';
-    bubble.appendChild(tick);
-    wrap.appendChild(bubble);
-    var hint = document.createElement('div');
-    hint.className = 'copy-hint';
-    hint.textContent = 'toque para copiar';
-    wrap.appendChild(hint);
-    chat.appendChild(wrap);
-  }
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function buildPromptWA(nome, contexto) {
-  return [
-    'Voce e do time de atendimento da Destrave, empresa brasileira de assistencia veicular por assinatura (destrave.se).',
-    'Redija mensagens de WhatsApp para responder o cliente ' + nome + '.',
-    'SITUACAO: ' + getSitLabel(situacaoAtual),
-    'CONTEXTO / MENSAGEM DO CLIENTE: ' + contexto,
-    'TOM SOLICITADO: ' + tomAtual,
-    REGULAMENTO,
-    'REGRAS DE TOM:',
-    '- Primeira mensagem: "Ola, ' + nome + '! Tudo bem?"',
-    '- Linguagem proxima, humana, profissional',
-    '- Empatia ANTES de qualquer regra',
-    '- Nunca diga "recusamos" - use "nao foi possivel pelo plano"',
-    '- Ao citar regras mencione os Termos de Uso: destrave.se/termos-de-uso',
-    '- Em recusa ou bloqueio: SEMPRE ofereça o servico avulso',
-    '- Finalize com emoji de coracao verde quando o tom for proximo',
-    '- Mensagens curtas e diretas - WhatsApp nao e email',
-    'FORMATO OBRIGATORIO:',
-    '[MENSAGEM 1]',
-    'texto da primeira mensagem',
-    '[MENSAGEM 2]',
-    'texto da segunda mensagem',
-    '[MENSAGEM 3]',
-    'texto da terceira mensagem (somente se necessario)',
-    'Sem markdown, sem asteriscos. Cada mensagem independente e pronta para enviar.'
-  ].join('\n');
-}
-
-function buildPromptLiberacao(dados) {
-  return [
-    'Voce e um especialista em atendimento da Destrave, empresa de assistencia veicular por assinatura.',
-    'Analise o perfil do cliente e a situacao do acionamento e decida se deve LIBERAR ou NAO LIBERAR o atendimento.',
-    '',
-    'DADOS DO CLIENTE:',
-    '- Nome: ' + dados.nome,
-    '- Tempo de assinatura: ' + dados.tempo,
-    '- Status de pagamento: ' + dados.pagamento,
-    '- Ultimo uso do servico: ' + dados.ultimoUso,
-    '- Frequencia de uso historica: ' + dados.frequencia,
-    '',
-    'SITUACAO DO ACIONAMENTO:',
-    '- Servico solicitado: ' + dados.servico,
-    '- Localizacao do veiculo: ' + dados.local,
-    (dados.contexto ? '- Contexto adicional: ' + dados.contexto : ''),
-    '',
-    REGULAMENTO,
-    '',
-    'CRITERIOS DE DECISAO:',
-    '- Veiculo em transito com pane inesperada = situacao de urgencia, tende a LIBERAR',
-    '- Veiculo em residencia ou local seguro = convenienza, tende a NAO LIBERAR',
-    '- Excecoes possiveis para clientes com longo historico, pagamento em dia e baixo uso - especialmente para servicos menores (bateria, pneu)',
-    '- Dentro da carencia de 30 dias para guincho = NAO LIBERAR (salvo emergencia grave)',
-    '- Cliente inadimplente = NAO LIBERAR',
-    '- Analise o contexto completo: cliente bom com situacao duvidosa pode merecer excecao',
-    '',
-    'FORMATO DA RESPOSTA - use exatamente esta estrutura:',
-    '[VEREDICTO] LIBERAR ou NAO LIBERAR ou AVALIAR COM LIDERANCA',
-    '',
-    '[JUSTIFICATIVA]',
-    'Explique em 3 a 5 linhas o raciocinio da decisao, citando os fatores do perfil do cliente e as regras aplicadas.',
-    '',
-    '[MENSAGEM SUGERIDA]',
-    'Escreva uma mensagem de WhatsApp para enviar ao cliente, adequada ao veredicto. Tom proximo e empatico. Sem markdown.'
-  ].join('\n');
-}
-
-async function chamarAPI(prompt, logData) {
-  var body = { messages: [{ role: 'user', content: prompt }] };
-  if (logData) body.log = logData;
-  var response = await fetch('/api/claude', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
+['login-senha','login-user'].forEach((id,i)=>{
+  document.getElementById(id).addEventListener('keydown',e=>{
+    if(e.key==='Enter') i===0?fazerLogin():document.getElementById('login-senha').focus();
   });
-  if (!response.ok) throw new Error('Erro ' + response.status);
-  var data = await response.json();
-  if (data.content && data.content[0] && data.content[0].text) return data.content[0].text;
-  throw new Error('Resposta invalida da API');
+});
+
+function sair(){
+  usuarioLogado=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('tela-login').style.display='flex';
+  document.getElementById('login-senha').value='';
+  document.getElementById('login-erro').style.display='none';
 }
 
-async function gerarMensagens() {
-  var nome = document.getElementById('nome').value.trim() || 'cliente';
-  var contexto = document.getElementById('contexto').value.trim();
-  if (!contexto) {
-    document.getElementById('contexto').focus();
-    document.getElementById('contexto').style.borderColor = '#E74C3C';
-    setTimeout(function() { document.getElementById('contexto').style.borderColor = ''; }, 2000);
+function cap(s){return s?s[0].toUpperCase()+s.slice(1):'';}
+
+// ══ ABAS ══════════════════════════════════════════════════
+function aba(id,el){
+  document.querySelectorAll('.painel').forEach(p=>p.classList.remove('ativo'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById('painel-'+id).classList.add('ativo');
+  el.classList.add('ativa');
+  if(id==='base') registrarAcesso('(abriu base)');
+}
+
+// ══ CLAUDE ════════════════════════════════════════════════
+async function claude(sistema,usuario){
+  try{
+    const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:sistema+'\n\n---\n\n'+usuario}],
+        log:{tipo:'claude',usuario:usuarioLogado,ts:new Date().toISOString()}})});
+    const d=await r.json();
+    return d.content?.[0]?.text||'Erro ao gerar resposta.';
+  }catch(e){return 'Erro de conexão.';}
+}
+
+async function gerarResposta(){
+  const sit=document.getElementById('situacao').value;
+  const nome=document.getElementById('nome-cliente').value;
+  const ctx=document.getElementById('contexto').value;
+  const tom=document.querySelector('input[name=tom]:checked')?.value||'Próximo';
+  const box=document.getElementById('resposta-whats');
+  if(!ctx&&!sit){box.innerHTML='<span class="resposta-placeholder">Preencha pelo menos a situação ou o contexto.</span>';return;}
+  box.innerHTML='<span class="resposta-placeholder">Gerando...</span>';
+  const sys=`Você é especialista em atendimento ao cliente da Destrave, empresa de assistência veicular 24h.
+Gere uma sequência de mensagens de WhatsApp humanas, empáticas e objetivas. Tom: ${tom}.
+Use quebras de linha naturais. Nunca invente informações sobre o plano do cliente.
+Regras: carência geral=20 dias. Carência entre guinchos=30 dias. Bateria/pneu/chaveiro SEM carência entre usos.
+Limite: 6 acionamentos/ano. Fatura vencida paga=aguarda 7 dias. Primeira mensalidade=20 dias de carência.`;
+  const r=await claude(sys,`Situação: ${sit||'não especificada'}\nCliente: ${nome||'não informado'}\nContexto: ${ctx}`);
+  box.textContent=r;
+}
+
+async function analisarSocorro(){
+  const dados={nome:document.getElementById('sc-nome').value,tempo:document.getElementById('sc-tempo').value,
+    pag:document.getElementById('sc-pag').value,uso:document.getElementById('sc-uso').value,
+    freq:document.getElementById('sc-freq').value,servico:document.getElementById('sc-servico').value,
+    local:document.getElementById('sc-local').value,ctx:document.getElementById('sc-contexto').value};
+  const box=document.getElementById('resposta-socorro');
+  if(!dados.servico||!dados.pag){box.innerHTML='<span class="resposta-placeholder">Preencha pelo menos o serviço e o status de pagamento.</span>';return;}
+  box.innerHTML='<span class="resposta-placeholder">Analisando...</span>';
+  const sys=`Você é analista de acionamento da Destrave. Analise se o acionamento deve ser LIBERADO ou NEGADO.
+Regras: Inadimplente=NÃO liberar. Fatura vencida recém-paga=aguarda 7 dias. Primeira mensalidade=carência 20 dias.
+Troca de placa=carência 20 dias. Carência entre guinchos=30 dias. Bateria/pneu/chaveiro=SEM carência entre usos.
+Limite: 6 usos/ano, 2 a cada 2 meses. Garagem=pode atender pneu/bateria/chaveiro. Guincho em garagem=cegonha(avulso).
+Rodovia=reboque até 100km. Serviço exclusivo para urgência/emergência.
+Responda: decisão clara (LIBERAR/NEGAR/ATENÇÃO), justificativa baseada nas regras, mensagem sugerida para o cliente.`;
+  const r=await claude(sys,Object.entries(dados).filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`).join('\n'));
+  box.textContent=r;
+}
+
+function copiar(id){
+  const t=document.getElementById(id).textContent;
+  navigator.clipboard.writeText(t).then(()=>{
+    const b=event.target;const orig=b.textContent;b.textContent='✓ Copiado';
+    setTimeout(()=>b.textContent=orig,1800);
+  });
+}
+
+function novaConversa(){
+  ['situacao','nome-cliente','contexto'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.getElementById('resposta-whats').innerHTML='<span class="resposta-placeholder">Preencha os dados ao lado e clique em Gerar sequência</span>';
+}
+
+// ══ BASE DE CONHECIMENTO ══════════════════════════════════
+let baseCompleta=[];
+let filtroAtivo='todos';
+
+const BASE_FIXA=[
+  {id:'r1',tipo:'regra',categoria:'socorro',titulo:'Carência entre acionamentos — regra geral',desc:'Quando aplicar carência entre um uso e outro',
+   detalhe:`GUINCHO / REBOQUE: carência de 30 dias entre um uso e o próximo.\n\nBATERIA, PNEU, CHAVEIRO, PANE SECA, TÁXI: NÃO há carência entre usos. O cliente pode acionar quantas vezes quiser dentro do limite do plano.\n\n⚠️ Exemplo do erro mais comum: cliente usou carga de bateria no dia 4 e quer usar de novo no dia 20 do mesmo mês. Isso É permitido. Carência de 30 dias só vale para guincho.`,
+   correto:'Verificar QUAL serviço foi usado antes. Carência de 30 dias é EXCLUSIVA do guincho.',regra:'Termos de uso Destrave — seção de limites de uso'},
+  {id:'r2',tipo:'regra',categoria:'socorro',titulo:'Carência de ativação — novos clientes',desc:'Primeiro acesso ao serviço após contratar',
+   detalhe:`Todo cliente novo tem carência de 20 dias após o pagamento da primeira mensalidade.\n\nEles NÃO podem usar nenhum serviço durante esses 20 dias.\n\nApós os 20 dias, o acesso é total (conforme o plano).`,
+   correto:'Verificar a data da primeira fatura paga e contar 20 dias corridos.',regra:'Termos de uso — período de ativação'},
+  {id:'r3',tipo:'regra',categoria:'socorro',titulo:'Carência após troca de placa',desc:'Cliente trocou a placa do veículo',
+   detalhe:`Quando o cliente troca a placa do veículo cadastrado, uma nova carência de 20 dias é aplicada automaticamente.\n\nDurante esses 20 dias, o cliente NÃO pode acionar socorro para o veículo com a nova placa.\n\nSempre verificar no cadastro (Vindi) quando a placa foi atualizada.`,
+   correto:'Verificar data da atualização da placa no cadastro. Contar 20 dias a partir daí.',regra:'Termos de uso — alteração de cadastro'},
+  {id:'r4',tipo:'regra',categoria:'socorro',titulo:'Fatura vencida recém-paga',desc:'Cliente estava inadimplente e acabou de pagar',
+   detalhe:`Se a fatura estava com status "VENCIDA" e o cliente pagou:\n→ Ele precisa aguardar 7 dias para usar o serviço.\n\nSe a fatura estava com status "AGUARDANDO PAGAMENTO" e o cliente pagou:\n→ O acesso é liberado IMEDIATAMENTE.\n\n⚠️ Verificar o STATUS da fatura no momento do pagamento, não apenas se foi paga.`,
+   correto:'Ver status da fatura na Vindi: "aguardando pagamento" = libera na hora. "Vencida" = aguarda 7 dias.',regra:'POP de atendimento de leads — seção 3.1'},
+  {id:'r5',tipo:'regra',categoria:'socorro',titulo:'Limite de acionamentos por ano',desc:'Quantas vezes o cliente pode usar',
+   detalhe:`Limite total: 6 acionamentos por ano (365 dias a partir da data da assinatura).\n\nRegra adicional: no máximo 2 acionamentos a cada 2 meses.\n\nPrestador chegou e cliente não estava: conta 1 uso (aguarda 10 min).\nCancelamento após prestador sair: conta 1 uso.\nCancelamento antes do prestador sair: NÃO conta.`,
+   correto:'Verificar histórico de acionamentos na planilha e na Vindi antes de qualquer liberação.',regra:'Termos de uso — limites de uso (4.1.1)'},
+  {id:'r6',tipo:'regra',categoria:'socorro',titulo:'Garagem e estacionamento — o que pode e não pode',desc:'Atendimento em locais fechados ou privados',
+   detalhe:`PODE atender em garagem ou estacionamento:\n• Troca de pneu\n• Carga de bateria\n• Chaveiro\n\nNÃO pode (guincho pelo plano):\n• Reboque saindo de garagem = trata como CEGONHA (transporte, não emergência)\n• Cegonha = serviço avulso, pago à parte`,
+   correto:'Verificar se é emergência real ou transporte programado. Garagem + guincho = cobrar avulso.',regra:'Descritivos dos serviços Destrave'},
+  {id:'r7',tipo:'regra',categoria:'socorro',titulo:'Distância máxima do guincho / reboque',desc:'Limite de quilômetros cobertos pelo plano',
+   detalhe:`Cobertura padrão: até 100km do local do chamado até o destino.\n\nAcima de 100km: o cliente paga a quilometragem extra diretamente ao prestador.\n\nEm rodovias: veículo vai até oficina mais próxima ou até 100km (o menor).\n\nSempre confirmar endereços no Google Maps antes de liberar.`,
+   correto:'Simular rota no Google Maps com endereços completos. Confirmar se passa de 100km.',regra:'Descritivos dos serviços — guincho/reboque'},
+  {id:'r8',tipo:'regra',categoria:'socorro',titulo:'Chaveiro — cobertura e limites',desc:'O que está e o que não está incluído',
+   detalhe:`COBRE até R$200 do valor do serviço de chaveiro.\n\nO chaveiro ABRE a porta — não faz cópia, não faz decodificação eletrônica.\n\nCliente precisa estar PRESENTE com a documentação do veículo.\n\nSe ultrapassar R$200, o cliente paga a diferença direto ao prestador.`,
+   correto:'Informar o limite de R$200 e que não inclui cópia. Orientar cliente a estar no local com documento.',regra:'Página do chaveiro — destrave.se'},
+  {id:'r9',tipo:'regra',categoria:'socorro',titulo:'Troca de pneu — o que o cliente precisa ter',desc:'Condições para liberar a troca de pneu',
+   detalhe:`Para que o serviço seja realizado, o cliente PRECISA ter:\n• Estepe calibrado e em boas condições\n• Macaco\n• Chave de roda\n\nSem estepe = o serviço NÃO pode ser feito. Orientar guincho para a oficina.\n\nMais de um pneu furado: prestador troca apenas o que tiver estepe.`,
+   correto:'Perguntar se tem estepe calibrado antes de liberar. Se não tiver, orientar para guincho.',regra:'Página troca de pneu — destrave.se'},
+  {id:'r10',tipo:'processo',categoria:'vindi',titulo:'Alterar plano contratado errado pelo site',desc:'Cliente assinou o plano errado e quer trocar',
+   detalhe:`Passo a passo na Vindi:\n1. Acessar cadastro do cliente\n2. Ir em Assinatura\n3. Cancelar a assinatura atual (data imediata se for erro recente)\n4. Criar nova assinatura com o plano correto\n5. Gerar a fatura do novo plano\n6. Enviar link de pagamento ao cliente\n7. Registrar no campo Observações: "Plano alterado de [X] para [Y] a pedido do cliente — data"\n\n⚠️ SEMPRE registrar na Vindi. Nunca alterar sem anotação.`,
+   correto:'Cancelar a assinatura errada e criar uma nova. Nunca editar o plano diretamente sem registro.',regra:'POP de atendimento — seção 5'},
+  {id:'r11',tipo:'processo',categoria:'vindi',titulo:'Antecipar fatura / gerar fatura avulsa',desc:'Cliente quer pagar antes do vencimento',
+   detalhe:`Para antecipar fatura:\n1. Acessar assinatura do cliente\n2. Ir em Ações → Renovar manualmente\n3. Gerar a fatura\n4. Enviar link ao cliente\n\nPara fatura avulsa:\n1. Ir em Faturas → Nova fatura\n2. Preencher valor e serviço\n3. Enviar link ao cliente`,
+   correto:'Usar "Renovar manualmente" para antecipar. Criar fatura avulsa para serviços fora do plano.',regra:'POP de atendimento — seção 5.1'},
+  {id:'r12',tipo:'processo',categoria:'vindi',titulo:'Atualizar fatura vencida',desc:'Fatura passou do prazo e cliente quer pagar',
+   detalhe:`1. Acessar Faturas do cliente\n2. Selecionar a fatura vencida\n3. Ir em Ações → Atualizar vencimento\n4. Novo prazo: PIX (até 3 dias) / Boleto (até 10 dias)\n5. Enviar o link atualizado ao cliente\n\nApós pagamento: verificar status original da fatura para definir a carência.`,
+   correto:'Atualizar vencimento, enviar link, e verificar qual carência se aplica conforme o status original.',regra:'POP de atendimento — seção 5.2'},
+  {id:'r13',tipo:'processo',categoria:'vindi',titulo:'Trocar método de pagamento',desc:'Cliente quer mudar de cartão para PIX ou boleto',
+   detalhe:`1. Ir na fatura vencida (ou antecipar se não houver)\n2. Ações → Trocar método de pagamento\n3. Selecionar novo método\n4. Enviar link ao cliente\n\nPara troca de cartão de crédito:\n1. Verificar perfil de pagamento → Remover cartão existente\n2. Antecipar fatura → Atualizar vencimento\n3. Enviar link (ao cadastrar novo cartão, o valor é debitado imediatamente — informar o cliente)`,
+   correto:'Trocar via Ações na fatura. Para cartão, remover o antigo antes de gerar novo link.',regra:'POP de atendimento — seção 5.3 e 5.4'},
+  {id:'r14',tipo:'processo',categoria:'processo',titulo:'Registros obrigatórios após qualquer acionamento',desc:'O que precisa ser registrado e onde',
+   detalhe:`Após QUALQUER acionamento (liberado ou negado), registrar em TRÊS lugares:\n\n1. VINDI: anotação no cadastro do cliente com data, serviço e resultado\n2. TRELLO: card na coluna correspondente + etiqueta correta\n3. PLANILHA DE ACIONAMENTOS: atualizar linha do cliente com status\n\n⚠️ Falta de registro em qualquer um dos três = erro de processo.`,
+   correto:'Registrar nos três sistemas SEMPRE: Vindi, Trello e Planilha. Nunca só em um ou dois.',regra:'POP Envio de Email Pós-Acionamento — etapa 6'},
+  {id:'r15',tipo:'processo',categoria:'processo',titulo:'Email pós-acionamento — quando e como enviar',desc:'Processo obrigatório após todo atendimento de socorro',
+   detalhe:`1. Filtrar acionamentos com email pendente na planilha\n2. Acessar cadastro na Vindi e verificar dados\n3. Preencher o modelo padrão (serviço, data, cidade, problema, km)\n4. Baixar fotos do card do Trello e anexar\n5. Enviar pelo email querofalarcom@destrave.se\n6. Registrar envio na Vindi, no Trello (etiqueta) e na planilha`,
+   correto:'Enviar sempre com foto do atendimento anexada. Registrar nos três sistemas após o envio.',regra:'POP Envio de Email Pós-Acionamento'},
+  {id:'r16',tipo:'erro',categoria:'erro',titulo:'Negar bateria/pneu/chaveiro por "carência"',desc:'Erro mais comum: aplicar carência de 30 dias em serviços que não têm',
+   detalhe:`ERRO: atendente nega carga de bateria, troca de pneu ou chaveiro alegando que o cliente usou um serviço há menos de 30 dias.\n\nA carência de 30 dias entre acionamentos existe SOMENTE para GUINCHO/REBOQUE.\n\nBateria, pneu, chaveiro e pane seca NÃO têm carência entre usos.\n\n✅ O que fazer: verificar SE o serviço anterior foi guincho. Se não foi, liberar normalmente.`,
+   correto:'Perguntar qual foi o serviço anterior. Se não foi guincho, pode liberar.',regra:'Termos de uso — limites e carências'},
+  {id:'r17',tipo:'erro',categoria:'erro',titulo:'Não registrar em um dos três sistemas',desc:'Acionamento registrado em apenas um lugar',
+   detalhe:`ERRO frequente: registrar só na planilha e esquecer o Trello, ou registrar no Trello e esquecer a Vindi.\n\nIsso causa:\n• Perda de histórico\n• Inconsistência entre sistemas\n• Dificuldade de auditar negativas\n• Problemas no email pós-acionamento\n\n✅ Criar hábito: abrir os três ao mesmo tempo, não fechar nenhum sem registrar.`,
+   correto:'Verificar os três antes de fechar o atendimento: Vindi ✓ Trello ✓ Planilha ✓',regra:'POP Envio de Email — etapa 6'},
+  {id:'r18',tipo:'erro',categoria:'erro',titulo:'Informar regra de carência errada para o cliente',desc:'Passar informação incorreta sobre quando o cliente pode usar',
+   detalhe:`ERRO: dizer ao cliente que ele precisa esperar X dias sem ter certeza da regra.\n\nAntes de qualquer informação sobre carência:\n1. Verificar o serviço solicitado\n2. Verificar o histórico de uso (Vindi / planilha)\n3. Verificar o status da assinatura e pagamento\n4. SÓ ENTÃO informar ao cliente\n\nSe tiver dúvida, consultar a base antes de responder.`,
+   correto:'Nunca dar informação sobre carência de cabeça. Consultar o histórico primeiro.',regra:'Base de conhecimento — regras de carência'},
+  {id:'r19',tipo:'processo',categoria:'vindi',titulo:'Consultar período de cobertura da assinatura',desc:'Verificar até quando o cliente está coberto',
+   detalhe:`Na Vindi:\n1. Acessar a assinatura do cliente\n2. Ir na última fatura PAGA\n3. Clicar em Detalhes\n4. Visualizar o período de cobertura indicado\n\nIsso mostra exatamente até quando a assinatura está ativa.`,
+   correto:'Verificar o período de cobertura antes de liberar, não só se a assinatura está "ativa".',regra:'POP de atendimento — seção 5.5'},
+  {id:'r20',tipo:'regra',categoria:'socorro',titulo:'Cancelamento após acionamento — como contar o uso',desc:'O acionamento conta mesmo se cancelado depois?',
+   detalhe:`Cancelou ANTES do prestador sair: NÃO conta como uso.\n\nCancelou DEPOIS do prestador já estar a caminho: CONTA como uso normal.\n\nPrestador chegou e cliente não estava: CONTA (prestador aguarda 10 min).\n\nEm todos os casos que contam: o cliente não pode solicitar novo serviço em menos de 7 dias.`,
+   correto:'Verificar em que momento o cancelamento foi feito. Prestador a caminho = uso contabilizado.',regra:'Descritivos dos serviços — cancelamento de socorro'},
+];
+
+function carregarBase(){
+  fetch('/api/aprendizados').then(r=>r.json()).then(ap=>{
+    baseCompleta=[...ap.map(a=>({...a,novo:true})),...BASE_FIXA];
+    filtrarBase();
+  }).catch(()=>{baseCompleta=[...BASE_FIXA];filtrarBase();});
+}
+
+function setFiltro(f,el){
+  filtroAtivo=f;
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('ativo'));
+  el.classList.add('ativo');
+  filtrarBase();
+}
+
+function filtrarBase(){
+  const q=document.getElementById('busca-base').value.toLowerCase().trim();
+  const el=document.getElementById('lista-base');
+  let itens=baseCompleta;
+
+  if(filtroAtivo!=='todos') itens=itens.filter(i=>i.tipo===filtroAtivo||i.categoria===filtroAtivo);
+
+  if(q){
+    itens=itens.filter(i=>[i.titulo,i.desc,i.detalhe,i.correto,i.regra,i.categoria].join(' ').toLowerCase().includes(q));
+    if(!itens.length){
+      el.innerHTML='<div class="sem-resultado">Nenhum resultado para "<strong>'+q+'</strong>"<br><small style="color:#3a5a3c">Tente: carência, guincho, bateria, vindi, plano, pneu, chaveiro...</small></div>';
+      return;
+    }
+    if(q.length>2) registrarAcesso(q);
+  }
+
+  if(!q&&filtroAtivo==='todos'){
+    el.innerHTML='<div class="base-vazio"><div style="font-size:32px;margin-bottom:8px">🔎</div><div style="color:var(--text2)">Digite uma palavra-chave ou selecione um filtro acima</div></div>';
     return;
   }
-  var chat = document.getElementById('chat-area');
-  document.getElementById('chat-placeholder').style.display = 'none';
-  chat.querySelectorAll('.msg-in, .msg-out-wrap, .seq-label, .loading-wrap').forEach(function(e) { e.remove(); });
-  var lw = document.createElement('div');
-  lw.className = 'loading-wrap';
-  lw.innerHTML = '<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-  chat.appendChild(lw);
-  chat.scrollTop = chat.scrollHeight;
-  document.getElementById('btn-gerar').disabled = true;
-  document.getElementById('btn-copiar-tudo').disabled = true;
-  document.getElementById('btn-nova').disabled = true;
-  setStatus('loading', 'Gerando mensagens...');
-  document.getElementById('wa-avatar').textContent = nome.charAt(0).toUpperCase();
-  document.getElementById('wa-nome').textContent = nome;
-  document.getElementById('wa-status-text').textContent = 'digitando...';
-  try {
-    var logWA = { tipo: 'whatsapp', situacao: getSitLabel(situacaoAtual), nome: nome, hora: new Date().toISOString() };
-    var texto = await chamarAPI(buildPromptWA(nome, contexto), logWA);
-    lw.remove();
-    var finalMsgs = parseMensagens(texto);
-    mensagensGeradas = finalMsgs;
-    renderMensagens(finalMsgs, nome, false);
-    historico.unshift({ sit: situacaoAtual, nome: nome, msgs: finalMsgs });
-    renderHistorico();
-    setStatus('ready', finalMsgs.length + ' mensagem' + (finalMsgs.length > 1 ? 's' : '') + ' gerada' + (finalMsgs.length > 1 ? 's' : '') + ' - clique para copiar');
-    document.getElementById('wa-status-text').textContent = 'online';
-    document.getElementById('btn-copiar-tudo').disabled = false;
-    document.getElementById('btn-nova').disabled = false;
-  } catch(err) {
-    var lw2 = document.querySelector('.loading-wrap');
-    if (lw2) lw2.remove();
-    setStatus('', 'Erro ao gerar. Tente novamente.');
-    console.error(err);
-  }
-  document.getElementById('btn-gerar').disabled = false;
+
+  el.innerHTML=itens.map(item=>`
+    <div class="rb${item.novo?' novo':''}" onclick="toggleRb(this)">
+      <div class="rb-head">
+        <span class="badge ${badgeClasse(item.tipo)}">${labelTipo(item.tipo)}</span>
+        ${item.novo?'<span class="badge badge-verde">✦ novo</span>':''}
+        <span class="badge badge-cinza">${item.categoria}</span>
+      </div>
+      <div class="rb-titulo">${item.titulo}</div>
+      <div class="rb-desc">${item.desc}</div>
+      <div class="rb-detalhe">
+        <div>${item.detalhe}</div>
+        ${item.correto?`<div class="rb-correto">✅ O que fazer: ${item.correto}</div>`:''}
+        ${item.regra?`<div class="rb-regra">📎 ${item.regra}</div>`:''}
+      </div>
+    </div>
+  `).join('');
 }
 
-async function analisarAcionamento() {
-  var nome = document.getElementById('lib-nome').value.trim() || 'Cliente';
-  var tempo = document.getElementById('lib-tempo').value;
-  var pagamento = document.getElementById('lib-pagamento').value;
-  var ultimoUso = document.getElementById('lib-ultimo-uso').value;
-  var frequencia = document.getElementById('lib-frequencia').value;
-  var servico = document.getElementById('lib-servico').value;
-  var local = document.getElementById('lib-local').value;
-  var contexto = document.getElementById('lib-contexto').value.trim();
+function toggleRb(el){el.classList.toggle('expandido');}
+function badgeClasse(t){return{regra:'badge-azul',processo:'badge-laranja',erro:'badge-cinza'}[t]||'badge-cinza';}
+function labelTipo(t){return{regra:'Regra',processo:'Processo',erro:'Caso de erro'}[t]||t;}
 
-  if (!tempo || !pagamento || !ultimoUso || !frequencia || !servico || !local) {
-    showToast('Preencha todos os campos obrigatorios');
-    return;
-  }
-
-  document.getElementById('lib-avatar').textContent = nome.charAt(0).toUpperCase();
-  document.getElementById('lib-nome-display').textContent = nome;
-  document.getElementById('lib-status-text').textContent = 'analisando...';
-  document.getElementById('btn-analisar').disabled = true;
-  document.getElementById('btn-copiar-msg').disabled = true;
-  setLibStatus('loading', 'Analisando perfil e situacao...');
-
-  document.getElementById('verdict-placeholder').style.display = 'none';
-  var resultEl = document.getElementById('verdict-result');
-  resultEl.style.display = 'flex';
-  resultEl.innerHTML = '<div class="loading-wrap" style="align-self:center;margin:auto"><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
-
-  try {
-    var texto = await chamarAPI(buildPromptLiberacao({
-      nome: nome, tempo: tempo, pagamento: pagamento,
-      ultimoUso: ultimoUso, frequencia: frequencia,
-      servico: servico, local: local, contexto: contexto
-    }));
-
-    var veredicto = 'analise';
-    var veredictoTexto = 'AVALIAR COM LIDERANCA';
-    var veredictoIcon = '⚠️';
-    if (texto.indexOf('NAO LIBERAR') !== -1 || texto.indexOf('NÃO LIBERAR') !== -1) {
-      veredicto = 'nao-libera';
-      veredictoTexto = 'NAO LIBERAR';
-      veredictoIcon = '🚫';
-    } else if (texto.indexOf('[VEREDICTO] LIBERAR') !== -1) {
-      veredicto = 'libera';
-      veredictoTexto = 'LIBERAR';
-      veredictoIcon = '✅';
-    }
-
-    var logLib = { tipo: 'liberacao', veredicto: veredicto, servico: servico, nome: nome, local: local, hora: new Date().toISOString() };
-    await chamarAPI(buildPromptLiberacao({ nome: nome, tempo: tempo, pagamento: pagamento, ultimoUso: ultimoUso, frequencia: frequencia, servico: servico, local: local, contexto: 'LOG_ONLY' }), logLib).catch(function(){});
-
-    var justPart = '';
-    var msgPart = '';
-    var justMatch = texto.match(/\[JUSTIFICATIVA\]([\s\S]*?)(\[MENSAGEM SUGERIDA\]|$)/);
-    var msgMatch = texto.match(/\[MENSAGEM SUGERIDA\]([\s\S]*?)$/);
-    if (justMatch) justPart = justMatch[1].trim();
-    if (msgMatch) msgPart = msgMatch[1].trim();
-
-    msgVeredictoAtual = msgPart;
-
-    resultEl.innerHTML = '';
-    var box = document.createElement('div');
-    box.className = 'verdict-box ' + veredicto;
-
-    var avulsoHtml = '';
-    if (veredicto === 'nao-libera') {
-      avulsoHtml = '<div style="margin-top:14px;padding:12px 14px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:8px;font-size:12px;color:#F5A623;">' +
-        '<strong>⚡ Lembrete:</strong> Ofereça o servico avulso ao cliente. Informe que pode realizar um orcamento no momento e, mediante aprovacao, encaminhar um prestador normalmente.' +
-        '</div>';
-    }
-
-    box.innerHTML =
-      '<div class="verdict-badge ' + veredicto + '">' + veredictoIcon + ' ' + veredictoTexto + '</div>' +
-      '<div class="verdict-justificativa">' + escHtml(justPart) + '</div>' +
-      avulsoHtml +
-      (msgPart ? '<div class="verdict-msg-label" style="margin-top:14px">Mensagem sugerida para o cliente</div><div class="verdict-msg" title="Clique para copiar" id="verdict-msg-el">' + escHtml(msgPart) + '</div>' : '');
-    resultEl.appendChild(box);
-
-    if (msgPart) {
-      document.getElementById('verdict-msg-el').onclick = function() {
-        navigator.clipboard.writeText(msgPart).then(function() { showToast('Mensagem copiada'); });
-      };
-      document.getElementById('btn-copiar-msg').disabled = false;
-    }
-
-    setLibStatus('ready', 'Analise concluida');
-    document.getElementById('lib-status-text').textContent = veredictoTexto.toLowerCase();
-
-  } catch(err) {
-    resultEl.innerHTML = '<div style="padding:20px;color:var(--red);font-size:13px">Erro ao analisar. Tente novamente.</div>';
-    setLibStatus('', 'Erro na analise');
-    console.error(err);
-  }
-  document.getElementById('btn-analisar').disabled = false;
+function registrarAcesso(termo){
+  fetch('/api/acesso-base',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({usuario:usuarioLogado,termo})}).catch(()=>{});
 }
 
-function copiarTudo() {
-  navigator.clipboard.writeText(mensagensGeradas.join('\n\n---\n\n')).then(function() { showToast('Todas as mensagens copiadas'); });
-}
-
-function copiarMsgVeredicto() {
-  if (msgVeredictoAtual) {
-    navigator.clipboard.writeText(msgVeredictoAtual).then(function() { showToast('Mensagem copiada'); });
-  }
-}
-
-function renderHistorico() {
-  if (!historico.length) return;
-  document.getElementById('historico').style.display = 'block';
-  var html = '';
-  for (var i = 0; i < Math.min(historico.length, 4); i++) {
-    var item = historico[i];
-    html += '<div class="historico-item" onclick="carregarHistorico(' + i + ')">';
-    html += '<div class="historico-item-tipo">' + escHtml(getSitLabel(item.sit)) + ' - ' + item.msgs.length + ' msgs</div>';
-    html += '<div class="historico-item-nome">' + escHtml(item.nome) + ' - ' + escHtml(item.msgs[0].slice(0, 45)) + '...</div>';
-    html += '</div>';
-  }
-  document.getElementById('historico-lista').innerHTML = html;
-}
-
-function carregarHistorico(i) {
-  var item = historico[i];
-  mensagensGeradas = item.msgs;
-  document.getElementById('nome').value = item.nome;
-  document.getElementById('wa-avatar').textContent = item.nome.charAt(0).toUpperCase();
-  document.getElementById('wa-nome').textContent = item.nome;
-  document.getElementById('wa-status-text').textContent = 'online';
-  renderMensagens(item.msgs, item.nome, false);
-  setStatus('ready', item.msgs.length + ' msgs - historico');
-  document.getElementById('btn-copiar-tudo').disabled = false;
-  document.getElementById('btn-nova').disabled = false;
-  document.getElementById('chat-placeholder').style.display = 'none';
-}
+carregarBase();
 </script>
 </body>
 </html>
