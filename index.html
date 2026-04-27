@@ -237,45 +237,15 @@ textarea { resize: vertical; min-height: 78px; }
             <span class="sit-label">Atendimento liberado</span>
             <span class="sit-sub">Tudo ok, acionar prestador</span>
           </button>
-          <button class="sit-btn" data-sit="negado_local" data-cor="sel-laranja" onclick="selSit(this)">
-            <span class="sit-emoji">🏠</span>
-            <span class="sit-label">Negado — residência</span>
-            <span class="sit-sub">Conveniência, não coberto</span>
-          </button>
-          <button class="sit-btn" data-sit="negado_intervalo" data-cor="sel-laranja" onclick="selSit(this)">
-            <span class="sit-emoji">⏳</span>
-            <span class="sit-label">Negado — intervalo 30d</span>
-            <span class="sit-sub">Guincho recente, aguardar</span>
-          </button>
-          <button class="sit-btn" data-sit="negado_limite" data-cor="sel-laranja" onclick="selSit(this)">
-            <span class="sit-emoji">🔒</span>
-            <span class="sit-label">Negado — limite atingido</span>
-            <span class="sit-sub">Acionamentos esgotados</span>
-          </button>
-          <button class="sit-btn" data-sit="negado_inadimplencia" data-cor="sel-laranja" onclick="selSit(this)">
-            <span class="sit-emoji">💳</span>
-            <span class="sit-label">Negado — inadimplência</span>
-            <span class="sit-sub">Pagamento em aberto</span>
-          </button>
-          <button class="sit-btn" data-sit="negado_carencia" data-cor="sel-azul" onclick="selSit(this)">
-            <span class="sit-emoji">🕐</span>
-            <span class="sit-label">Em carência</span>
-            <span class="sit-sub">Aguardar 20 dias</span>
-          </button>
-          <button class="sit-btn" data-sit="avulso" data-cor="sel-azul" onclick="selSit(this)">
-            <span class="sit-emoji">💰</span>
-            <span class="sit-label">Serviço avulso</span>
-            <span class="sit-sub">Oferecer fora do plano</span>
-          </button>
-          <button class="sit-btn" data-sit="excecao" data-cor="sel-azul" onclick="selSit(this)">
-            <span class="sit-emoji">⚠️</span>
-            <span class="sit-label">Exceção aprovada</span>
-            <span class="sit-sub">Liberação especial</span>
+          <button class="sit-btn" data-sit="negado" data-cor="sel-laranja" onclick="selSit(this)">
+            <span class="sit-emoji">❌</span>
+            <span class="sit-label">Atendimento negado</span>
+            <span class="sit-sub">Explique o motivo no contexto</span>
           </button>
           <button class="sit-btn" data-sit="pos_atendimento" data-cor="sel" onclick="selSit(this)">
             <span class="sit-emoji">📋</span>
             <span class="sit-label">Pós-atendimento</span>
-            <span class="sit-sub">Registro + satisfação</span>
+            <span class="sit-sub">Registro + pesquisa satisfação</span>
           </button>
           <button class="sit-btn" data-sit="cancelamento" data-cor="sel-laranja" onclick="selSit(this)">
             <span class="sit-emoji">❌</span>
@@ -287,10 +257,10 @@ textarea { resize: vertical; min-height: 78px; }
             <span class="sit-label">Reativação</span>
             <span class="sit-sub">Voltar para o plano</span>
           </button>
-          <button class="sit-btn" data-sit="reajuste" data-cor="sel-azul" onclick="selSit(this)">
-            <span class="sit-emoji">📈</span>
-            <span class="sit-label">Reajuste</span>
-            <span class="sit-sub">Atualização de valor</span>
+          <button class="sit-btn" data-sit="outros" data-cor="sel-azul" onclick="selSit(this)">
+            <span class="sit-emoji">💬</span>
+            <span class="sit-label">Outros</span>
+            <span class="sit-sub">Descreva no contexto abaixo</span>
           </button>
         </div>
       </div>
@@ -357,6 +327,7 @@ textarea { resize: vertical; min-height: 78px; }
             <select id="ac-status">
               <option value="ativo">✅ Ativo e em dia</option>
               <option value="inadimplente">❌ Inadimplente</option>
+              <option value="inadimplente_frequente">⚠️ Ativo, mas inadimplente frequente</option>
               <option value="carencia">⏳ Em carência</option>
               <option value="bloqueado">🔒 Bloqueado</option>
               <option value="cancelado">❌ Cancelado</option>
@@ -375,26 +346,17 @@ textarea { resize: vertical; min-height: 78px; }
 
         <div class="fg">
           <label>Plano</label>
-          <select id="ac-plano">
-            <option value="completao">Completão — 6 acionamentos/ano (2 a cada 2 meses)</option>
-            <option value="auto_especial">Auto Especial (mai/2025+)</option>
-            <option value="so_me_socorre_novo">Só Me Socorre Aí — atual (4x/ano)</option>
-            <option value="so_me_socorre_antigo">Só Me Socorre Aí — antigo (1 auto socorro + copart.)</option>
-            <option value="quero_tudo">Quero Tudo e Mais um Pouco</option>
-            <option value="reboque">Exclusivo Reboque (4x/ano)</option>
-            <option value="personalizado">Personalizado</option>
-          </select>
+          <input type="text" id="ac-plano" placeholder="Ex: Completão, Só Me Socorre, Auto Especial, Personalizado...">
         </div>
 
         <div class="fg">
           <label>Frequência de uso histórica</label>
           <select id="ac-freq">
             <option value="nunca">Nunca utilizou (primeiro acionamento)</option>
-            <option value="dentro">Dentro do limite do plano</option>
-            <option value="guincho_30d">Guincho usado há menos de 30 dias</option>
-            <option value="2x_30d">2 usos de outros serviços em 30 dias</option>
-            <option value="no_limite">No limite — último acionamento disponível</option>
-            <option value="excedido">Limite do plano excedido</option>
+            <option value="pouco">Usa pouco — 1 a 2x por ano</option>
+            <option value="moderado">Usa moderado — dentro do limite do plano</option>
+            <option value="muito">Usa muito — próximo ou no limite</option>
+            <option value="excedido">Excedeu o limite do plano</option>
           </select>
         </div>
 
@@ -490,40 +452,70 @@ textarea { resize: vertical; min-height: 78px; }
 
 <!-- ══════════ PAINEL DASHBOARD ══════════ -->
 <div id="p-dash" class="panel">
-  <div class="dash-g3">
-    <div class="metric"><div class="metric-val" style="color:var(--verde)">127</div><div class="metric-lbl">Atendimentos este mês</div><div class="metric-delta up">▲ +12% vs mês anterior</div></div>
-    <div class="metric"><div class="metric-val" style="color:var(--azul)">83%</div><div class="metric-lbl">Taxa de liberação</div><div class="metric-delta up">▲ +3pp</div></div>
-    <div class="metric"><div class="metric-val" style="color:var(--laranja)">17%</div><div class="metric-lbl">Taxa de negativa</div><div class="metric-delta dn">▼ -3pp</div></div>
+
+  <!-- Login -->
+  <div id="dash-login" class="card" style="max-width:380px;margin:40px auto;padding:32px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:28px;margin-bottom:8px">📊</div>
+      <div style="font-weight:700;font-size:16px">Dashboard Operacional</div>
+      <div style="font-size:13px;color:var(--text3);margin-top:4px">Acesso restrito</div>
+    </div>
+    <div class="fg">
+      <label>Senha</label>
+      <input type="password" id="dash-senha" placeholder="Digite a senha" onkeydown="if(event.key==='Enter')carregarDash()">
+    </div>
+    <div id="dash-erro" class="alert warn hidden" style="margin-bottom:12px">⚠️ Senha incorreta.</div>
+    <button class="btn btn-primary" onclick="carregarDash()">Entrar</button>
   </div>
-  <div class="dash-g2">
-    <div class="card">
-      <div class="card-title"><div class="ct-icon" style="background:var(--laranja-bg)">📊</div>Motivos de negativa</div>
-      <div class="hist-list">
-        <div class="hist-item"><div class="h-dot" style="background:var(--laranja)"></div><div><div class="h-title">Conveniência / Residência</div><div class="h-sub">38% das negativas</div></div></div>
-        <div class="hist-item"><div class="h-dot" style="background:var(--azul)"></div><div><div class="h-title">Intervalo 30 dias (guincho)</div><div class="h-sub">29% das negativas</div></div></div>
-        <div class="hist-item"><div class="h-dot" style="background:var(--verde)"></div><div><div class="h-title">Limite do plano</div><div class="h-sub">18% das negativas</div></div></div>
-        <div class="hist-item"><div class="h-dot" style="background:#9ca3af"></div><div><div class="h-title">Inadimplência / Carência</div><div class="h-sub">15% das negativas</div></div></div>
+
+  <!-- Conteúdo (oculto até login) -->
+  <div id="dash-content" class="hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+      <div style="font-weight:700;font-size:15px">Painel Operacional</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="dash-periodo" onchange="filtrarPeriodo()" style="width:auto;padding:7px 28px 7px 10px;font-size:13px">
+          <option value="7">Últimos 7 dias</option>
+          <option value="30" selected>Últimos 30 dias</option>
+          <option value="90">Últimos 90 dias</option>
+          <option value="0">Tudo</option>
+        </select>
+        <button class="btn-copy" onclick="carregarDash()">🔄 Atualizar</button>
+        <button class="btn-copy" onclick="sairDash()">Sair</button>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title"><div class="ct-icon" style="background:var(--verde-bg)">🚗</div>Serviços mais solicitados</div>
-      <div class="hist-list">
-        <div class="hist-item"><div class="h-dot" style="background:var(--verde)"></div><div><div class="h-title">Guincho / Reboque</div><div class="h-sub">42 — 33% do total</div></div></div>
-        <div class="hist-item"><div class="h-dot" style="background:var(--azul)"></div><div><div class="h-title">Carga de Bateria</div><div class="h-sub">38 — 30% do total</div></div></div>
-        <div class="hist-item"><div class="h-dot" style="background:var(--laranja)"></div><div><div class="h-title">Troca de Pneu</div><div class="h-sub">24 — 19%</div></div></div>
-        <div class="hist-item"><div class="h-dot" style="background:#9ca3af"></div><div><div class="h-title">Chaveiro</div><div class="h-sub">23 — 18%</div></div></div>
+
+    <!-- Métricas -->
+    <div class="dash-g3" id="dash-metricas"></div>
+
+    <!-- Gráficos / listas -->
+    <div class="dash-g2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title"><div class="ct-icon" style="background:var(--azul-bg)">💬</div>Situações mais geradas (WhatsApp)</div>
+        <div id="dash-situacoes" class="hist-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="ct-icon" style="background:var(--verde-bg)">🚗</div>Serviços analisados (Acionamento)</div>
+        <div id="dash-servicos" class="hist-list"></div>
       </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-title"><div class="ct-icon" style="background:var(--laranja-bg)">⚠️</div>Exceções abertas — últimos 30 dias</div>
-    <div class="hist-list">
-      <div class="hist-item"><div class="h-dot" style="background:var(--laranja)"></div><div><div class="h-title">Adriano Nascimento — 12/03/2026</div><div class="h-sub">Troca de pneu na garagem do prédio. Exceção aprovada pelo histórico de 3 anos. Chuvas impediram prestadores no dia.</div></div></div>
-      <div class="hist-item"><div class="h-dot" style="background:var(--azul)"></div><div><div class="h-title">Ana Gabriela — 24/03/2026</div><div class="h-sub">Carga de bateria na residência. Regra de conveniência aplicada. Cliente cancelou após negativa.</div></div></div>
-      <div class="hist-item"><div class="h-dot" style="background:var(--laranja)"></div><div><div class="h-title">Rosete Lima — 29/03 e 04/04/2026</div><div class="h-sub">Guincho em 29/03. Nova solicitação em 04/04 dentro do intervalo de 30 dias. Negado, orçamento avulso enviado.</div></div></div>
-      <div class="hist-item"><div class="h-dot" style="background:var(--azul)"></div><div><div class="h-title">Luiz Fernando — 01 e 08/04/2026</div><div class="h-sub">Duas solicitações em menos de 30 dias. Veículo informado na residência. Regras comunicadas por e-mail. Negado.</div></div></div>
+
+    <div class="dash-g2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-title"><div class="ct-icon" style="background:var(--laranja-bg)">🔍</div>Decisões de acionamento</div>
+        <div id="dash-decisoes" class="hist-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="ct-icon" style="background:var(--verde-bg)">📅</div>Uso por dia (últimos 14 dias)</div>
+        <div id="dash-timeline" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="ct-icon" style="background:var(--azul-bg)">🕐</div>Uso por hora do dia</div>
+      <div id="dash-horas" style="display:flex;gap:4px;align-items:flex-end;height:60px;padding-top:8px;flex-wrap:wrap"></div>
     </div>
   </div>
+
 </div>
 
 </div><!-- /wrap -->
@@ -552,8 +544,6 @@ function selTom(btn) {
   btn.classList.add('on');
   tomAtual = btn.dataset.tom;
 }
-// init tom
-document.querySelector('.tom-btn').classList.add('on');
 
 // ── GERAR WA ──
 const REGULAMENTO = `
@@ -620,7 +610,16 @@ Cada mensagem deve ser independente e pronta para copiar e enviar.`;
     const res = await fetch('/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }],
+        log: {
+          tipo: 'whatsapp',
+          situacao: sitAtual,
+          tom: tomAtual,
+          ts: new Date().toISOString()
+        }
+      })
     });
     const data = await res.json();
     const text = data.content?.map(b => b.text || '').join('') || '';
@@ -740,13 +739,40 @@ RESPONDA em JSON puro, sem markdown, sem blocos de código:
     const res = await fetch('/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }],
+        log: {
+          tipo: 'acionamento',
+          servico: servico,
+          local: local,
+          status_cliente: status,
+          freq: freq,
+          ts: new Date().toISOString()
+        }
+      })
     });
     const data = await res.json();
     const raw = data.content?.map(b => b.text || '').join('') || '';
     let parsed;
     try { parsed = JSON.parse(raw.replace(/```json|```/g,'')); }
     catch { parsed = { decisao:'VERIFICAR', titulo:'Erro na análise', motivo: raw, alerta: null, mensagem_cliente: '' }; }
+
+    // logar a decisão separadamente
+    fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: '.' }],
+        log: {
+          tipo: 'acionamento_decisao',
+          decisao: parsed.decisao,
+          servico: servico,
+          ts: new Date().toISOString()
+        }
+      })
+    }).catch(() => {});
+
     renderAc(parsed, { nome, status, tempo, plano, freq, servico, local });
   } catch(e) {
     document.getElementById('ac-an-box').innerHTML = '<div class="alert warn">Erro ao chamar a API.</div>';
@@ -759,8 +785,8 @@ function renderAc(p, dados) {
   document.getElementById('ac-result').classList.remove('hidden');
 
   // perfil
-  const freqCor = { nunca:'g', dentro:'g', guincho_30d:'o', '2x_30d':'o', no_limite:'b', excedido:'o' };
-  const statusCor = { ativo:'g', inadimplente:'o', carencia:'b', bloqueado:'o', cancelado:'o' };
+  const freqCor = { nunca:'g', pouco:'g', moderado:'g', muito:'b', excedido:'o' };
+  const statusCor = { ativo:'g', inadimplente:'o', inadimplente_frequente:'o', carencia:'b', bloqueado:'o', cancelado:'o' };
   document.getElementById('ac-perfil').innerHTML = `
     <div class="pi"><div class="pi-lbl">Status</div><div class="pi-val ${statusCor[dados.status]||''}">${statusLabel2(dados.status)}</div></div>
     <div class="pi"><div class="pi-lbl">Plano</div><div class="pi-val">${planoLabel(dados.plano)}</div></div>
@@ -808,17 +834,171 @@ function setBtnLoading(txtId, spinId, txt, loading) {
 function primeiroNome(nome) { return nome.split(' ')[0]; }
 
 function sitLabel(s) {
-  const m = { liberado:'Atendimento liberado', negado_local:'Negado — veículo na residência (conveniência)', negado_intervalo:'Negado — intervalo mínimo de 30 dias não atingido', negado_limite:'Negado — limite do plano atingido', negado_inadimplencia:'Negado — inadimplência (pagamento em aberto)', negado_carencia:'Em carência (aguardar 20 dias)', avulso:'Oferta de serviço avulso', excecao:'Exceção aprovada pelo gestor', pos_atendimento:'Pós-atendimento (registro + satisfação)', cancelamento:'Cancelamento solicitado', reativacao:'Reativação de assinatura', reajuste:'Reajuste de mensalidade' };
+  const m = { liberado:'Atendimento liberado — acionar o prestador', negado:'Atendimento negado (motivo descrito no contexto)', pos_atendimento:'Pós-atendimento — registrar ocorrência e pedir avaliação', cancelamento:'Cancelamento solicitado pelo cliente', reativacao:'Reativação de assinatura cancelada', outros:'Situação específica descrita no contexto' };
   return m[s] || s;
 }
 
 function tempoLabel(v) { return { novo:'< 3 meses', medio:'3–12 meses', longo:'1–2 anos', fidelizado:'> 2 anos' }[v] || v; }
-function freqLabel(v) { return { nunca:'Nunca usou', dentro:'Dentro do limite', guincho_30d:'Guincho < 30d', '2x_30d':'2x em 30 dias', no_limite:'No limite', excedido:'Excedido' }[v] || v; }
-function planoLabel(v) { return { completao:'Completão', auto_especial:'Auto Especial', so_me_socorre_novo:'Só Me Socorre (atual)', so_me_socorre_antigo:'Só Me Socorre (antigo)', quero_tudo:'Quero Tudo', reboque:'Só Reboque', personalizado:'Personalizado' }[v] || v; }
+function freqLabel(v) { return { nunca:'Nunca usou', pouco:'Usa pouco (1–2x/ano)', moderado:'Uso moderado', muito:'Usa muito / no limite', excedido:'Excedeu o limite' }[v] || v; }
+function planoLabel(v) { return v || '—'; }
 function servicoLabel(v) { return { guincho:'Guincho/Reboque', bateria:'Carga de Bateria', pneu:'Troca de Pneu', chaveiro:'Chaveiro', pane_seca:'Pane Seca', taxi:'Táxi/Uber' }[v] || v; }
 function localLabel(v) { return { via_publica:'Via pública', estacionamento:'Estacionamento', garagem_acesso:'Garagem c/ acesso', residencia:'Residência', oficina:'Oficina' }[v] || v; }
 function resCtxLabel(v) { return { pane_agora:'Pane recente/agora', continuidade:'Continuidade de pane anterior', parado_dias:'Parado há dias (conveniência)', transporte:'Transporte sem pane atual' }[v] || v; }
-function statusLabel2(v) { return { ativo:'Ativo', inadimplente:'Inadimplente', carencia:'Em carência', bloqueado:'Bloqueado', cancelado:'Cancelado' }[v] || v; }
+function statusLabel2(v) { return { ativo:'Ativo', inadimplente:'Inadimplente', inadimplente_frequente:'Inadimplente frequente', carencia:'Em carência', bloqueado:'Bloqueado', cancelado:'Cancelado' }[v] || v; }
+
+// ── DASHBOARD ──
+let dashSenha = '';
+let todosLogs = [];
+
+async function carregarDash() {
+  const senhaInput = document.getElementById('dash-senha').value.trim();
+  if (senhaInput) dashSenha = senhaInput;
+  if (!dashSenha) return;
+
+  try {
+    const res = await fetch('/api/dashboard', {
+      headers: { 'x-dashboard-senha': dashSenha }
+    });
+    if (res.status === 401) {
+      document.getElementById('dash-erro').classList.remove('hidden');
+      return;
+    }
+    document.getElementById('dash-erro').classList.add('hidden');
+    document.getElementById('dash-login').classList.add('hidden');
+    document.getElementById('dash-content').classList.remove('hidden');
+    todosLogs = await res.json();
+    filtrarPeriodo();
+  } catch(e) {
+    document.getElementById('dash-erro').classList.remove('hidden');
+  }
+}
+
+function sairDash() {
+  dashSenha = '';
+  document.getElementById('dash-senha').value = '';
+  document.getElementById('dash-login').classList.remove('hidden');
+  document.getElementById('dash-content').classList.add('hidden');
+}
+
+function filtrarPeriodo() {
+  const dias = parseInt(document.getElementById('dash-periodo').value);
+  const agora = new Date();
+  const logs = dias === 0 ? todosLogs : todosLogs.filter(l => {
+    const d = new Date(l.ts);
+    return (agora - d) / (1000 * 60 * 60 * 24) <= dias;
+  });
+  renderDash(logs);
+}
+
+function renderDash(logs) {
+  const wa = logs.filter(l => l.tipo === 'whatsapp');
+  const ac = logs.filter(l => l.tipo === 'acionamento');
+  const dec = logs.filter(l => l.tipo === 'acionamento_decisao');
+  const total = wa.length + ac.length;
+
+  // métricas
+  const liberados = dec.filter(l => l.decisao === 'LIBERAR').length;
+  const negados = dec.filter(l => l.decisao === 'NEGAR').length;
+  const taxaLib = dec.length ? Math.round(liberados / dec.length * 100) : '—';
+
+  document.getElementById('dash-metricas').innerHTML = `
+    <div class="metric">
+      <div class="metric-val" style="color:var(--verde)">${total}</div>
+      <div class="metric-lbl">Usos totais no período</div>
+      <div style="font-size:11.5px;color:var(--text3);margin-top:6px">${wa.length} respostas · ${ac.length} análises</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val" style="color:var(--azul)">${dec.length ? taxaLib + '%' : '—'}</div>
+      <div class="metric-lbl">Taxa de liberação</div>
+      <div style="font-size:11.5px;color:var(--text3);margin-top:6px">${liberados} liberados · ${negados} negados</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val" style="color:var(--laranja)">${wa.length}</div>
+      <div class="metric-lbl">Respostas WhatsApp geradas</div>
+      <div style="font-size:11.5px;color:var(--text3);margin-top:6px">Tela de resposta</div>
+    </div>
+  `;
+
+  // situações whatsapp
+  const sitCount = contarCampo(wa, 'situacao');
+  const sitLabels = { liberado:'Atendimento liberado', negado:'Atendimento negado', pos_atendimento:'Pós-atendimento', cancelamento:'Cancelamento', reativacao:'Reativação', outros:'Outros' };
+  const sitCores = { liberado:'var(--verde)', negado:'var(--laranja)', pos_atendimento:'var(--azul)', cancelamento:'var(--laranja)', reativacao:'var(--verde)', outros:'#9ca3af' };
+  document.getElementById('dash-situacoes').innerHTML = renderBarras(sitCount, sitLabels, sitCores, wa.length) || '<div style="color:var(--text3);font-size:13px;padding:8px 0">Nenhum dado ainda</div>';
+
+  // serviços acionamento
+  const servCount = contarCampo(ac, 'servico');
+  const servLabels = { guincho:'Guincho/Reboque', bateria:'Carga de Bateria', pneu:'Troca de Pneu', chaveiro:'Chaveiro', pane_seca:'Pane Seca', taxi:'Táxi/Uber' };
+  document.getElementById('dash-servicos').innerHTML = renderBarras(servCount, servLabels, {}, ac.length) || '<div style="color:var(--text3);font-size:13px;padding:8px 0">Nenhum dado ainda</div>';
+
+  // decisões
+  const decCount = contarCampo(dec, 'decisao');
+  const decLabels = { LIBERAR:'Liberado', NEGAR:'Negado', VERIFICAR:'Verificar c/ gestor', EXCECAO:'Exceção' };
+  const decCores = { LIBERAR:'var(--verde)', NEGAR:'var(--laranja)', VERIFICAR:'var(--azul)', EXCECAO:'var(--laranja)' };
+  document.getElementById('dash-decisoes').innerHTML = renderBarras(decCount, decLabels, decCores, dec.length) || '<div style="color:var(--text3);font-size:13px;padding:8px 0">Nenhum dado ainda</div>';
+
+  // timeline 14 dias
+  const timeline = document.getElementById('dash-timeline');
+  const hoje = new Date();
+  const diasTimeline = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(hoje);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const count = logs.filter(l => l.ts && l.ts.slice(0, 10) === key).length;
+    diasTimeline.push({ key, count, label: d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' }) });
+  }
+  const maxDia = Math.max(...diasTimeline.map(d => d.count), 1);
+  timeline.innerHTML = diasTimeline.map(d => `
+    <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+      <div style="width:48px;color:var(--text3);flex-shrink:0">${d.label}</div>
+      <div style="flex:1;background:var(--surface2);border-radius:4px;height:16px;overflow:hidden">
+        <div style="width:${Math.round(d.count/maxDia*100)}%;background:var(--verde);height:100%;border-radius:4px;transition:width .3s"></div>
+      </div>
+      <div style="width:20px;text-align:right;font-weight:600;color:var(--text)">${d.count || ''}</div>
+    </div>
+  `).join('');
+
+  // horas
+  const horaCount = new Array(24).fill(0);
+  logs.forEach(l => { if (l.ts) horaCount[new Date(l.ts).getHours()]++; });
+  const maxHora = Math.max(...horaCount, 1);
+  document.getElementById('dash-horas').innerHTML = horaCount.map((c, h) => `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:18px" title="${h}h: ${c} usos">
+      <div style="font-size:9px;color:var(--text3)">${c || ''}</div>
+      <div style="width:100%;background:${c ? 'var(--verde)' : 'var(--surface2)'};border-radius:3px 3px 0 0;height:${Math.round(c/maxHora*44)+4}px;opacity:${c ? 0.4 + (c/maxHora*0.6) : 1}"></div>
+      <div style="font-size:9px;color:var(--text3)">${h}</div>
+    </div>
+  `).join('');
+}
+
+function contarCampo(arr, campo) {
+  return arr.reduce((acc, l) => {
+    const k = l[campo] || 'outro';
+    acc[k] = (acc[k] || 0) + 1;
+    return acc;
+  }, {});
+}
+
+function renderBarras(count, labels, cores, total) {
+  const sorted = Object.entries(count).sort((a, b) => b[1] - a[1]);
+  if (!sorted.length) return '';
+  const max = sorted[0][1];
+  return sorted.map(([k, v]) => {
+    const cor = cores[k] || 'var(--azul)';
+    const pct = total ? Math.round(v / total * 100) : 0;
+    return `
+      <div class="hist-item" style="flex-direction:column;align-items:stretch;gap:5px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="h-title">${labels[k] || k}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text2)">${v} <span style="color:var(--text3);font-weight:400">(${pct}%)</span></div>
+        </div>
+        <div style="background:var(--border);border-radius:4px;height:6px">
+          <div style="width:${Math.round(v/max*100)}%;background:${cor};height:6px;border-radius:4px;transition:width .4s"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 </script>
 </body>
 </html>
