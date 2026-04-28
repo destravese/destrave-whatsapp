@@ -19,14 +19,14 @@ function markProcessed(cardId) {
   setTimeout(() => processedCards.delete(cardId), PROCESSED_TTL);
 }
 
-app.get('/webhook/trello', (req, res) => {
+app.get('/webhook/trello', function(req, res) {
   res.sendStatus(200);
 });
 
-app.post('/webhook/trello', async (req, res) => {
+app.post('/webhook/trello', async function(req, res) {
   res.sendStatus(200);
 
-  const { action } = req.body;
+  const action = req.body.action;
   if (!action) return;
   if (action.type !== 'addLabelToCard') return;
 
@@ -39,7 +39,7 @@ app.post('/webhook/trello', async (req, res) => {
   if (!cardId) return;
 
   if (processedCards.has(cardId)) {
-    console.log('Card ' + cardId + ' ja processado recentemente. Ignorando.');
+    console.log('Card ja processado: ' + cardId);
     return;
   }
 
@@ -53,7 +53,7 @@ app.post('/webhook/trello', async (req, res) => {
     console.log('Novo evento: ' + list.name + ' | Card: ' + fullCard.name);
 
     if (!eventType) {
-      console.log('Lista nao mapeada: ' + list.name + '. Ignorando.');
+      console.log('Lista nao mapeada: ' + list.name);
       return;
     }
 
@@ -69,34 +69,4 @@ app.post('/webhook/trello', async (req, res) => {
     console.log('Resultado:', result);
 
   } catch (err) {
-    console.error('Erro ao processar card ' + cardId + ':', err.message);
-  }
-});
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Destrave Automacao', timestamp: new Date().toISOString() });
-});
-
-app.get('/setup-webhook', async (req, res) => {
-  try {
-    const result = await axios.post('https://api.trello.com/1/webhooks', {
-      description: 'Destrave Automacao',
-      callbackURL: 'https://destrave-automacao.onrender.com/webhook/trello',
-      idModel: process.env.TRELLO_BOARD_ID,
-    }, {
-      params: {
-        key: process.env.TRELLO_API_KEY,
-        token: process.env.TRELLO_TOKEN,
-      }
-    });
-    res.json({ success: true, webhook: result.data });
-  } catch (err) {
-    res.json({ success: false, error: (err.response && err.response.data) || err.message });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log('Destrave Automacao rodando na porta ' + PORT);
-  console.log('Health: http://localhost:' + PORT + '/health');
-  console.log('Webhook: http://localhost:' + PORT + '/webhook/trello');
-});
+    console.error('Erro ao processar card ' + car
