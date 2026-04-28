@@ -46,8 +46,17 @@ function extractEmail(description) {
   if (!description) return null;
   const lines = description.split('\n');
   for (const line of lines) {
-    const match = line.match(/email[:\s]+([^\s]+@[^\s]+)/i);
-    if (match) return match[1].trim();
+    // Tenta pegar email de formato markdown: [email](mailto:email)
+    const markdownMatch = line.match(/\[([^\]]+@[^\]]+)\]\(mailto:([^)]+)\)/i);
+    if (markdownMatch) return markdownMatch[2].trim();
+    
+    // Tenta pegar email simples: Email: cliente@email.com
+    const simpleMatch = line.match(/email[:\s]+([^\s\]]+@[^\s\]]+)/i);
+    if (simpleMatch) return simpleMatch[1].trim();
+    
+    // Tenta pegar qualquer email na linha
+    const anyMatch = line.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+    if (anyMatch) return anyMatch[1].trim();
   }
   return null;
 }
