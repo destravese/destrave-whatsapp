@@ -34,6 +34,7 @@ async function handleAcionamento(card) {
     date,
     servico: fields.servico,
     cidade: fields.cidade,
+    estado: fields.estado,
     problema: fields.problema,
     km: fields.km,
     observacoes: fields.observacoes,
