@@ -1,4 +1,3 @@
-// src/services/gmail.js
 const { google } = require('googleapis');
 const nodemailer = require('nodemailer');
 
@@ -28,9 +27,14 @@ function createTransporter() {
 async function sendEmail({ to, subject, body, attachments = [] }) {
   const transporter = createTransporter();
 
+  // Limpa o email removendo espaços, quebras de linha e caracteres invisíveis
+  const cleanTo = String(to).trim().replace(/[\r\n\t]/g, '');
+  
+  console.log(`📧 Destinatário limpo: "${cleanTo}"`);
+
   const mailOptions = {
     from: `Atendimento Destrave <${process.env.GMAIL_FROM}>`,
-    to: to,
+    to: cleanTo,
     bcc: process.env.GMAIL_BCC,
     subject: subject,
     text: body,
@@ -42,7 +46,7 @@ async function sendEmail({ to, subject, body, attachments = [] }) {
   };
 
   const result = await transporter.sendMail(mailOptions);
-  console.log(`✉️  Email enviado para ${to} | MessageID: ${result.messageId}`);
+  console.log(`✉️  Email enviado para ${cleanTo} | MessageID: ${result.messageId}`);
   return result;
 }
 
