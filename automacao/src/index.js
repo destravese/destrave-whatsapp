@@ -78,7 +78,25 @@ app.post('/webhook/trello', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'Destrave Automação', timestamp: new Date().toISOString() });
 });
-
+// Rota temporária para registrar o webhook no Trello
+app.get('/setup-webhook', async (req, res) => {
+  const axios = require('axios');
+  try {
+    const result = await axios.post('https://api.trello.com/1/webhooks', {
+      description: 'Destrave Automacao',
+      callbackURL: 'https://destrave-automacao.onrender.com/webhook/trello',
+      idModel: process.env.TRELLO_BOARD_ID,
+    }, {
+      params: {
+        key: process.env.TRELLO_API_KEY,
+        token: process.env.TRELLO_TOKEN,
+      }
+    });
+    res.json({ success: true, webhook: result.data });
+  } catch (err) {
+    res.json({ success: false, error: err.response?.data || err.message });
+  }
+});
 app.listen(PORT, () => {
   console.log(`\n🚀 Destrave Automação rodando na porta ${PORT}`);
   console.log(`   Health check: http://localhost:${PORT}/health`);
