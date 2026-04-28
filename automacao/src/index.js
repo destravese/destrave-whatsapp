@@ -1,7 +1,7 @@
-// src/index.js
 require('dotenv').config();
 
 const express = require('express');
+const axios = require('axios');
 const trelloService = require('./services/trello');
 const { handleAcionamento, handleNegativa, handleCancelamento } = require('./handlers');
 
@@ -9,7 +9,6 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-
 const LABEL_EMAIL_ENVIADO = process.env.TRELLO_LABEL_EMAIL_ENVIADO;
 
 const processedCards = new Set();
@@ -29,19 +28,18 @@ app.post('/webhook/trello', async (req, res) => {
 
   const { action } = req.body;
   if (!action) return;
-
   if (action.type !== 'addLabelToCard') return;
 
-  const labelId = action.data?.label?.id;
-  const card = action.data?.card;
+  const labelId = action.data && action.data.label && action.data.label.id;
+  const card = action.data && action.data.card;
 
   if (!LABEL_EMAIL_ENVIADO || labelId !== LABEL_EMAIL_ENVIADO) return;
 
-  const cardId = card?.id;
+  const cardId = card && card.id;
   if (!cardId) return;
 
   if (processedCards.has(cardId)) {
-    console.log(`⏭️  Card ${cardId} já processado recentemente. Ignorando.`);
+    console.log('Card ' + cardId + ' ja processado recentemente. Ignorando.');
     return;
   }
 
@@ -52,10 +50,10 @@ app.post('/webhook/trello', async (req, res) => {
     const list = await trelloService.getList(fullCard.idList);
     const eventType = trelloService.identifyEventType(list.name);
 
-    console.log(`\n📥 Novo evento: ${list.name} | Card: ${fullCard.name}`);
+    console.log('Novo evento: ' + list.name + ' | Card: ' + fullCard.name);
 
     if (!eventType) {
-      console.log(`⏭️  Lista "${list.name}" não mapeada. Ignorando.`);
+      console.log('Lista nao mapeada: ' + list.name + '. Ignorando.');
       return;
     }
 
@@ -68,19 +66,18 @@ app.post('/webhook/trello', async (req, res) => {
       result = await handleCancelamento(fullCard);
     }
 
-    console.log(`📊 Resultado:`, result);
+    console.log('Resultado:', result);
 
   } catch (err) {
-    console.error(`❌ Erro ao processar card ${cardId}:`, err.message);
+    console.error('Erro ao processar card ' + cardId + ':', err.message);
   }
 });
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Destrave Automação', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', service: 'Destrave Automacao', timestamp: new Date().toISOString() });
 });
-// Rota temporária para registrar o webhook no Trello
+
 app.get('/setup-webhook', async (req, res) => {
-  const axios = require('axios');
   try {
     const result = await axios.post('https://api.trello.com/1/webhooks', {
       description: 'Destrave Automacao',
@@ -94,11 +91,12 @@ app.get('/setup-webhook', async (req, res) => {
     });
     res.json({ success: true, webhook: result.data });
   } catch (err) {
-    res.json({ success: false, error: err.response?.data || err.message });
+    res.json({ success: false, error: (err.response && err.response.data) || err.message });
   }
 });
+
 app.listen(PORT, () => {
-  console.log(`\n🚀 Destrave Automação rodando na porta ${PORT}`);
-  console.log(`   Health check: http://localhost:${PORT}/health`);
-  console.log(`   Webhook: http://localhost:${PORT}/webhook/trello\n`);
+  console.log('Destrave Automacao rodando na porta ' + PORT);
+  console.log('Health: http://localhost:' + PORT + '/health');
+  console.log('Webhook: http://localhost:' + PORT + '/webhook/trello');
 });
