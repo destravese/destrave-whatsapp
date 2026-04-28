@@ -104,12 +104,23 @@ function parseDescription(description) {
         .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
       if (normalizedKey === 'email') fields.email = value;
-      else if (normalizedKey === 'servico' || normalizedKey === 'serviço') fields.servico = value;
+      else if (normalizedKey === 'servico' || normalizedKey === 'servico') fields.servico = value;
       else if (normalizedKey === 'cidade') fields.cidade = value;
+      else if (normalizedKey === 'estado' || normalizedKey === 'uf') fields.estado = value;
       else if (normalizedKey === 'problema') fields.problema = value;
       else if (normalizedKey === 'km' || normalizedKey === 'kms') fields.km = value;
     }
   }
+
+  const separatorIndex = lines.findIndex(l => l.trim() === '---');
+  if (separatorIndex !== -1) {
+    fields.observacoes = lines.slice(separatorIndex + 1).join('\n').trim();
+  } else {
+    fields.contexto = description;
+  }
+
+  return fields;
+}
 
   const separatorIndex = lines.findIndex(l => l.trim() === '---');
   if (separatorIndex !== -1) {
