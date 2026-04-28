@@ -30,9 +30,9 @@ async function sendEmail({ to, subject, body, attachments = [] }) {
 
   const mailOptions = {
     from: `Atendimento Destrave <${process.env.GMAIL_FROM}>`,
-    to,
+    to: to,
     bcc: process.env.GMAIL_BCC,
-    subject,
+    subject: subject,
     text: body,
     attachments: attachments.map(att => ({
       filename: att.filename,
