@@ -1,21 +1,14 @@
-const { google } = require('googleapis');
-const nodemailer = require('nodemailer');
+require("dotenv").config();
+
+var nodemailer = require("nodemailer");
+var googleapis = require("googleapis");
+var google = googleapis.google;
 
 function createTransporter() {
-  const oauth2Client = new google.auth.OAuth2(
-    process.env.GMAIL_CLIENT_ID,
-    process.env.GMAIL_CLIENT_SECRET,
-    'https://developers.google.com/oauthplayground'
-  );
-
-  oauth2Client.setCredentials({
-    refresh_token: process.env.GMAIL_REFRESH_TOKEN,
-  });
-
   return nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      type: 'OAuth2',
+      type: "OAuth2",
       user: process.env.GMAIL_FROM,
       clientId: process.env.GMAIL_CLIENT_ID,
       clientSecret: process.env.GMAIL_CLIENT_SECRET,
@@ -24,30 +17,39 @@ function createTransporter() {
   });
 }
 
-async function sendEmail({ to, subject, body, attachments = [] }) {
-  const transporter = createTransporter();
+function sleep(ms) {
+  return new Promise(function(resolve) { setTimeout(resolve, ms); });
+}
 
-  // Limpa o email removendo espaços, quebras de linha e caracteres invisíveis
- var cleanTo = String(to).replace(/[\r\n\t\s"']/g, "").trim();
-  
-  console.log(`📧 Destinatário limpo: "${cleanTo}"`);
+async function sendEmail(options) {
+  var to = options.to;
+  var subject = options.subject;
+  var body = options.body;
+  var attachments = options.attachments || [];
 
-  const mailOptions = {
-    from: `Atendimento Destrave <${process.env.GMAIL_FROM}>`,
+  var cleanTo = String(to).replace(/[\r\n\t\s"']/g, "").trim();
+  console.log("Destinatario: " + cleanTo);
+
+  var mailOptions = {
+    from: "Atendimento Destrave <" + process.env.GMAIL_FROM + ">",
     to: cleanTo,
     bcc: process.env.GMAIL_BCC,
     subject: subject,
     text: body,
-    attachments: attachments.map(att => ({
-      filename: att.filename,
-      content: att.content,
-      contentType: att.contentType,
-    })),
+    attachments: attachments.map(function(att) {
+      return {
+        filename: att.filename,
+        content: att.content,
+        contentType: att.contentType,
+      };
+    }),
   };
 
-  const result = await transporter.sendMail(mailOptions);
-  console.log(`✉️  Email enviado para ${cleanTo} | MessageID: ${result.messageId}`);
-  return result;
-}
+  var maxTentativas = 3;
+  var tentativa = 1;
 
-module.exports = { sendEmail };
+  while (tentativa <= maxTentativas) {
+    try {
+      var transporter = createTransporter();
+      var result = await transporter.sendMail(mailOptions);
+      console.log("Email enviado para " + cleanTo +
