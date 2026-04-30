@@ -1,37 +1,32 @@
-// src/handlers/index.js
-const trelloService = require('../services/trello');
-const { generateEmail } = require('../services/openai');
-const { sendEmail } = require('../services/gmail');
-const { promptAcionamento, promptNegativa, promptCancelamento } = require('../prompts/destrave');
+var trelloService = require("../services/trello");
+var openaiService = require("../services/openai");
+var gmailService = require("../services/gmail");
+var prompts = require("../prompts/destrave");
 
 async function handleAcionamento(card) {
-  console.log(`🔧 Processando acionamento: ${card.name}`);
-
-  const clientName = trelloService.extractClientName(card.name);
-  const date = trelloService.extractDate(card.name);
-  const fields = trelloService.parseDescription(card.desc);
-  const email = fields.email;
-
+  console.log("Processando acionamento: " + card.name);
+  var clientName = trelloService.extractClientName(card.name);
+  var date = trelloService.extractDate(card.name);
+  var fields = trelloService.parseDescription(card.desc);
+  var email = fields.email;
   if (!email) {
-    console.warn(`⚠️  Email não encontrado no card "${card.name}". Pulando.`);
-    return { success: false, reason: 'email_not_found' };
+    console.log("Email nao encontrado no card: " + card.name);
+    return { success: false, reason: "email_not_found" };
   }
-
-  const { photos } = trelloService.separateAttachments(card.attachments || []);
-
-  const attachments = [];
-  for (const photo of photos) {
+  var separated = trelloService.separateAttachments(card.attachments || []);
+  var photos = separated.photos;
+  var attachments = [];
+  for (var i = 0; i < photos.length; i++) {
     try {
-      const downloaded = await trelloService.downloadAttachment(photo);
+      var downloaded = await trelloService.downloadAttachment(photos[i]);
       attachments.push(downloaded);
     } catch (err) {
-      console.warn(`⚠️  Não foi possível baixar o anexo "${photo.name}": ${err.message}`);
+      console.log("Erro ao baixar anexo: " + err.message);
     }
   }
-
-  const prompt = promptAcionamento({
-    clientName,
-    date,
+  var prompt = prompts.promptAcionamento({
+    clientName: clientName,
+    date: date,
     servico: fields.servico,
     cidade: fields.cidade,
     estado: fields.estado,
@@ -39,62 +34,28 @@ async function handleAcionamento(card) {
     km: fields.km,
     observacoes: fields.observacoes,
   });
-
-  const { assunto, corpo } = await generateEmail(prompt);
-
-  await sendEmail({
+  var generated = await openaiService.generateEmail(prompt);
+  await gmailService.sendEmail({
     to: email,
-    subject: assunto,
-    body: corpo,
-    attachments,
+    subject: generated.assunto,
+    body: generated.corpo,
+    attachments: attachments,
   });
-
-  console.log(`✅ Email de acionamento enviado para ${email}`);
-  return { success: true, type: 'acionamento', to: email };
+  console.log("Email de acionamento enviado para " + email);
+  return { success: true, type: "acionamento", to: email };
 }
 
 async function handleNegativa(card) {
-  console.log(`🚫 Processando negativa: ${card.name}`);
-
-  const clientName = trelloService.extractClientName(card.name);
-  const date = trelloService.extractDate(card.name);
-  const email = trelloService.extractEmail(card.desc);
-  const contexto = card.desc || '';
-
+  console.log("Processando negativa: " + card.name);
+  var clientName = trelloService.extractClientName(card.name);
+  var date = trelloService.extractDate(card.name);
+  var email = trelloService.extractEmail(card.desc);
+  var contexto = card.desc || "";
   if (!email) {
-    console.warn(`⚠️  Email não encontrado no card "${card.name}". Pulando.`);
-    return { success: false, reason: 'email_not_found' };
+    console.log("Email nao encontrado no card: " + card.name);
+    return { success: false, reason: "email_not_found" };
   }
-
-  const prompt = promptNegativa({ clientName, date, contexto });
-  const { assunto, corpo } = await generateEmail(prompt);
-
-  await sendEmail({ to: email, subject: assunto, body: corpo });
-
-  console.log(`✅ Email de negativa enviado para ${email}`);
-  return { success: true, type: 'negativa', to: email };
-}
-
-async function handleCancelamento(card) {
-  console.log(`❌ Processando cancelamento: ${card.name}`);
-
-  const clientName = trelloService.extractClientName(card.name);
-  const date = trelloService.extractDate(card.name);
-  const email = trelloService.extractEmail(card.desc);
-  const contexto = card.desc || '';
-
-  if (!email) {
-    console.warn(`⚠️  Email não encontrado no card "${card.name}". Pulando.`);
-    return { success: false, reason: 'email_not_found' };
-  }
-
-  const prompt = promptCancelamento({ clientName, date, contexto });
-  const { assunto, corpo } = await generateEmail(prompt);
-
-  await sendEmail({ to: email, subject: assunto, body: corpo });
-
-  console.log(`✅ Email de cancelamento enviado para ${email}`);
-  return { success: true, type: 'cancelamento', to: email };
-}
-
-module.exports = { handleAcionamento, handleNegativa, handleCancelamento };
+  var prompt = prompts.promptNegativa({ clientName: clientName, date: date, contexto: contexto });
+  var generated = await openaiService.generateEmail(prompt);
+  await gmailService.sendEmail({ to: email, subject: generated.assunto, body: generated.corpo });
+  console.log("Email de negativa envi
