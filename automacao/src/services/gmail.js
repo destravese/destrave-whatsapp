@@ -28,7 +28,7 @@ async function sendEmail({ to, subject, body, attachments = [] }) {
   const transporter = createTransporter();
 
   // Limpa o email removendo espaços, quebras de linha e caracteres invisíveis
-  const cleanTo = String(to).trim().replace(/[\r\n\t]/g, '');
+ var cleanTo = String(to).replace(/[\r\n\t\s"']/g, "").trim();
   
   console.log(`📧 Destinatário limpo: "${cleanTo}"`);
 
