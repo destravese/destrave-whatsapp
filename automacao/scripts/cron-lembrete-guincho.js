@@ -24,10 +24,15 @@ function createTransporter() {
 function extrairEmail(descricao) {
   if (!descricao) return null;
   const primeiraLinha = descricao.split('\n')[0];
+  
+  // Formato markdown: (mailto:email)
   const markdown = primeiraLinha.match(/\(mailto:([^)]+)\)/i);
-  if (markdown) return markdown[1].trim();
+  if (markdown) return markdown[1].trim().replace(/["\s]/g, '');
+  
+  // Email simples
   const simples = primeiraLinha.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
-  if (simples) return simples[1].trim();
+  if (simples) return simples[1].trim().replace(/["\s]/g, '');
+  
   return null;
 }
 
