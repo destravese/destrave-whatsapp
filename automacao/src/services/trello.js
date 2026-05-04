@@ -1,7 +1,5 @@
 require("dotenv").config();
-
 var axios = require("axios");
-
 var BASE = "https://api.trello.com/1";
 var auth = {
   key: process.env.TRELLO_API_KEY,
@@ -46,14 +44,29 @@ function identifyEventType(listName) {
   return null;
 }
 
+function cleanEmail(raw) {
+  if (!raw) return null;
+  var mdMatch = raw.match(/\(mailto:([^)]+)\)/i);
+  if (mdMatch) return mdMatch[1].trim().replace(/["\s]/g, "");
+  var emMatch = raw.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+  return emMatch ? emMatch[1].trim() : null;
+}
+
 function extractEmail(description) {
   if (!description) return null;
-  var firstLine = description.split("\n")[0];
-  var markdownMatch = firstLine.match(/\(mailto:([^)]+)\)/i);
-  if (markdownMatch) return markdownMatch[1].trim().replace(/["\s]/g, "");
-  var simpleMatch = firstLine.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
-  if (simpleMatch) return simpleMatch[1].trim().replace(/["\s]/g, "");
-  return null;
+  var lines = description.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    var mdMatch = line.match(/\(mailto:([^)]+)\)/i);
+    if (mdMatch) return mdMatch[1].trim().replace(/["\s]/g, "");
+    var labelMatch = line.match(/^email[:\s]+(.+)/i);
+    if (labelMatch) {
+      var found = cleanEmail(labelMatch[1]);
+      if (found) return found;
+    }
+  }
+  var anyMatch = description.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+  return anyMatch ? anyMatch[1].trim() : null;
 }
 
 function extractClientName(cardName) {
@@ -93,12 +106,19 @@ function parseDescription(description) {
       var key = line.substring(0, colonIndex).trim().toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       var value = line.substring(colonIndex + 1).trim();
-      if (key === "email") fields.email = value;
-      else if (key === "servico") fields.servico = value;
-      else if (key === "cidade") fields.cidade = value;
-      else if (key === "estado" || key === "uf") fields.estado = value;
-      else if (key === "problema") fields.problema = value;
-      else if (key === "km" || key === "kms") fields.km = value;
+      if (key === "email") {
+        fields.email = cleanEmail(value) || value.trim();
+      } else if (key === "servico") {
+        fields.servico = value;
+      } else if (key === "cidade") {
+        fields.cidade = value;
+      } else if (key === "estado" || key === "uf") {
+        fields.estado = value;
+      } else if (key === "problema") {
+        fields.problema = value;
+      } else if (key === "km" || key === "kms") {
+        fields.km = value;
+      }
     }
   }
   var separatorIndex = -1;
