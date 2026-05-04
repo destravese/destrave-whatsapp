@@ -46,6 +46,8 @@ function identifyEventType(listName) {
 
 function cleanEmail(raw) {
   if (!raw) return null;
+  var brackMatch = raw.match(/\[([^\]]+)\]\(mailto:[^)]+\)/i);
+  if (brackMatch) return brackMatch[1].trim().replace(/["\s]/g, "");
   var mdMatch = raw.match(/\(mailto:([^)]+)\)/i);
   if (mdMatch) return mdMatch[1].trim().replace(/["\s]/g, "");
   var emMatch = raw.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
@@ -59,7 +61,7 @@ function extractEmail(description) {
     var line = lines[i];
     var mdMatch = line.match(/\(mailto:([^)]+)\)/i);
     if (mdMatch) return mdMatch[1].trim().replace(/["\s]/g, "");
-    var labelMatch = line.match(/^email[:\s]+(.+)/i);
+    var labelMatch = line.match(/^e-?mail[:\s]+(.+)/i);
     if (labelMatch) {
       var found = cleanEmail(labelMatch[1]);
       if (found) return found;
@@ -104,7 +106,8 @@ function parseDescription(description) {
     if (line.includes(":")) {
       var colonIndex = line.indexOf(":");
       var key = line.substring(0, colonIndex).trim().toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[-\s]/g, "");
       var value = line.substring(colonIndex + 1).trim();
       if (key === "email") {
         fields.email = cleanEmail(value) || value.trim();
