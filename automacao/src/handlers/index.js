@@ -18,7 +18,7 @@ async function handleAcionamento(card) {
   var attachments = [];
   for (var i = 0; i < photos.length; i++) {
     try {
-      var downloaded = await trelloService.downloadAttachment(photos[i]);
+      var downloaded = await trelloService.downloadAttachment(card.id, photos[i]);
       attachments.push(downloaded);
     } catch (err) {
       console.log("Erro ao baixar anexo: " + err.message);
