@@ -30,7 +30,7 @@ function buildRawEmail(options) {
     "From: Atendimento Destrave <" + process.env.GMAIL_FROM + ">",
     "To: " + cleanTo,
     "Bcc: " + (process.env.GMAIL_BCC || ""),
-    "Subject: " + options.subject,
+    "Subject: =?UTF-8?B?" + Buffer.from(options.subject).toString("base64") + "?=",
     "MIME-Version: 1.0",
     hasAttachments
       ? "Content-Type: multipart/mixed; boundary=\"" + boundary + "\""
