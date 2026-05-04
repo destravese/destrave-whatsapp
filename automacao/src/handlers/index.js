@@ -49,13 +49,13 @@ async function handleNegativa(card) {
   console.log("Processando negativa: " + card.name);
   var clientName = trelloService.extractClientName(card.name);
   var date = trelloService.extractDate(card.name);
-  var email = trelloService.extractEmail(card.desc);
-  var contexto = card.desc || "";
+  var fields = trelloService.parseDescription(card.desc);
+  var email = fields.email;
   if (!email) {
     console.log("Email nao encontrado no card: " + card.name);
     return { success: false, reason: "email_not_found" };
   }
-  var prompt = prompts.promptNegativa({ clientName: clientName, date: date, contexto: contexto });
+  var prompt = prompts.promptNegativa({ clientName: clientName, date: date, contexto: card.desc || "" });
   var generated = await openaiService.generateEmail(prompt);
   await gmailService.sendEmail({ to: email, subject: generated.assunto, body: generated.corpo });
   console.log("Email de negativa enviado para " + email);
@@ -66,13 +66,13 @@ async function handleCancelamento(card) {
   console.log("Processando cancelamento: " + card.name);
   var clientName = trelloService.extractClientName(card.name);
   var date = trelloService.extractDate(card.name);
-  var email = trelloService.extractEmail(card.desc);
-  var contexto = card.desc || "";
+  var fields = trelloService.parseDescription(card.desc);
+  var email = fields.email;
   if (!email) {
     console.log("Email nao encontrado no card: " + card.name);
     return { success: false, reason: "email_not_found" };
   }
-  var prompt = prompts.promptCancelamento({ clientName: clientName, date: date, contexto: contexto });
+  var prompt = prompts.promptCancelamento({ clientName: clientName, date: date, contexto: card.desc || "" });
   var generated = await openaiService.generateEmail(prompt);
   await gmailService.sendEmail({ to: email, subject: generated.assunto, body: generated.corpo });
   console.log("Email de cancelamento enviado para " + email);
