@@ -22,10 +22,14 @@ async function getList(listId) {
   return res.data;
 }
 
-async function downloadAttachment(attachment) {
-  var res = await axios.get(attachment.url, {
+async function downloadAttachment(cardId, attachment) {
+  var url = BASE + "/cards/" + cardId + "/attachments/" + attachment.id + "/download";
+  var res = await axios.get(url, {
     params: { key: auth.key, token: auth.token },
     responseType: "arraybuffer",
+    headers: {
+      Authorization: "OAuth oauth_consumer_key=\"" + auth.key + "\", oauth_token=\"" + auth.token + "\"",
+    },
   });
   return {
     filename: attachment.name,
