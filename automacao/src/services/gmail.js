@@ -13,8 +13,16 @@ function getOAuth2Client() {
   return oauth2Client;
 }
 
+function cleanEmailAddress(raw) {
+  return String(raw)
+    .replace(/\(mailto:[^)]+\)/gi, "")
+    .replace(/\[([^\]]+)\]/g, "$1")
+    .replace(/[\r\n\t"']/g, "")
+    .trim();
+}
+
 function buildRawEmail(options) {
-  const cleanTo = String(options.to).replace(/[\r\n\t\s"']/g, "").trim();
+  const cleanTo = cleanEmailAddress(options.to);
   const boundary = "destrave_boundary_" + Date.now();
   const hasAttachments = options.attachments && options.attachments.length > 0;
 
@@ -61,7 +69,7 @@ function sleep(ms) {
 }
 
 async function sendEmail(options) {
-  const cleanTo = String(options.to).replace(/[\r\n\t\s"']/g, "").trim();
+  const cleanTo = cleanEmailAddress(options.to);
   console.log("Destinatario: " + cleanTo);
 
   const auth = getOAuth2Client();
